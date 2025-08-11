@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Portfolio{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h1><i class="fas fa-tachometer-alt me-2"></i>Admin Dashboard</h1>
+            <p class="text-muted">Manage your portfolio content</p>
+        </div>
+    </div>
+    
+    <!-- Stats Cards -->
+    <div class="row mb-5">
+        <div class="col-md-2 mb-3">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <i class="fas fa-project-diagram fa-2x text-primary mb-2"></i>
+                    <h4 class="card-title">{{ stats.projects }}</h4>
+                    <p class="card-text small">Total Projects</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 mb-3">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <i class="fas fa-eye fa-2x text-success mb-2"></i>
+                    <h4 class="card-title">{{ stats.published_projects }}</h4>
+                    <p class="card-text small">Published</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 mb-3">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <i class="fas fa-trophy fa-2x text-warning mb-2"></i>
+                    <h4 class="card-title">{{ stats.achievements }}</h4>
+                    <p class="card-text small">Achievements</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 mb-3">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <i class="fas fa-tags fa-2x text-info mb-2"></i>
+                    <h4 class="card-title">{{ stats.categories }}</h4>
+                    <p class="card-text small">Categories</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 mb-3">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <i class="fas fa-comments fa-2x text-secondary mb-2"></i>
+                    <h4 class="card-title">{{ stats.comments }}</h4>
+                    <p class="card-text small">Comments</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 mb-3">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <i class="fas fa-heart fa-2x text-danger mb-2"></i>
+                    <h4 class="card-title">{{ stats.likes }}</h4>
+                    <p class="card-text small">Total Likes</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quick Actions -->
+    <div class="row mb-5">
+        <div class="col">
+            <h3>Quick Actions</h3>
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <a href="{{ url_for('admin_project_new') }}" class="btn btn-primary w-100 py-3">
+                        <i class="fas fa-plus fa-2x d-block mb-2"></i>
+                        Add New Project
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a href="{{ url_for('admin_achievement_new') }}" class="btn btn-success w-100 py-3">
+                        <i class="fas fa-trophy fa-2x d-block mb-2"></i>
+                        Add Achievement
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a href="{{ url_for('admin_categories') }}" class="btn btn-info w-100 py-3">
+                        <i class="fas fa-tags fa-2x d-block mb-2"></i>
+                        Manage Categories
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a href="{{ url_for('admin_about_edit') }}" class="btn btn-warning w-100 py-3">
+                        <i class="fas fa-user-edit fa-2x d-block mb-2"></i>
+                        Edit About Page
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Comments -->
+    {% if recent_comments %}
+    <div class="row">
+        <div class="col">
+            <h3>Recent Comments</h3>
+            <div class="card">
+                <div class="card-body">
+                    {% for comment in recent_comments %}
+                        <div class="d-flex mb-3 pb-3 {% if not loop.last %}border-bottom{% endif %}">
+                            <div class="flex-shrink-0 me-3">
+                                {% if comment.author.profile_image_url %}
+                                    <img src="{{ comment.author.profile_image_url }}" 
+                                         class="rounded-circle" width="40" height="40" 
+                                         style="object-fit: cover;">
+                                {% else %}
+                                    <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" 
+                                         style="width: 40px; height: 40px;">
+                                        <i class="fas fa-user text-light"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <h6 class="mb-0">{{ comment.author.display_name }}</h6>
+                                        <small class="text-muted">
+                                            on <a href="{{ url_for('project_detail', id=comment.project.id) }}">{{ comment.project.title }}</a>
+                                        </small>
+                                    </div>
+                                    <small class="text-muted">{{ comment.created_at.strftime('%m/%d/%Y') }}</small>
+                                </div>
+                                <p class="mb-0">{{ comment.content[:100] }}{% if comment.content|length > 100 %}...{% endif %}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

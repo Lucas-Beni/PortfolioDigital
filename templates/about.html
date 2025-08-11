@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}About - Portfolio{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <!-- Profile Section -->
+        <div class="col-lg-4 mb-5">
+            <div class="text-center">
+                {% if about_me.profile_image %}
+                    <img src="{{ url_for('static', filename='uploads/' + about_me.profile_image) }}" 
+                         class="img-fluid rounded-circle shadow mb-4" 
+                         style="max-width: 300px; width: 100%; object-fit: cover; aspect-ratio: 1/1;">
+                {% else %}
+                    <div class="bg-secondary rounded-circle mx-auto d-flex align-items-center justify-content-center mb-4" 
+                         style="width: 300px; height: 300px;">
+                        <i class="fas fa-user fa-5x text-light"></i>
+                    </div>
+                {% endif %}
+                
+                <!-- Social Links -->
+                <div class="d-flex justify-content-center gap-3 mb-4">
+                    {% if about_me.linkedin_url %}
+                        <a href="{{ about_me.linkedin_url }}" target="_blank" class="btn btn-outline-primary">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    {% endif %}
+                    {% if about_me.github_url %}
+                        <a href="{{ about_me.github_url }}" target="_blank" class="btn btn-outline-secondary">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    {% endif %}
+                    {% if about_me.website_url %}
+                        <a href="{{ about_me.website_url }}" target="_blank" class="btn btn-outline-info">
+                            <i class="fas fa-globe"></i>
+                        </a>
+                    {% endif %}
+                    {% if about_me.resume_url %}
+                        <a href="{{ about_me.resume_url }}" target="_blank" class="btn btn-outline-success">
+                            <i class="fas fa-file-pdf"></i> Resume
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Content Section -->
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title mb-4">About Me</h1>
+                    
+                    <div class="content">
+                        {% if about_me.content %}
+                            {{ about_me.content|nl2br }}
+                        {% else %}
+                            <p class="text-muted">
+                                Welcome to my portfolio! I'm passionate about creating innovative solutions 
+                                and sharing my journey through code. Stay tuned for more updates about my 
+                                background, skills, and experiences.
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Stats -->
+            <div class="row mt-5">
+                <div class="col-md-4 mb-3">
+                    <div class="card text-center h-100">
+                        <div class="card-body">
+                            <i class="fas fa-project-diagram fa-2x text-primary mb-3"></i>
+                            <h5 class="card-title">Projects</h5>
+                            <p class="card-text">Innovative solutions and creative implementations</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card text-center h-100">
+                        <div class="card-body">
+                            <i class="fas fa-trophy fa-2x text-warning mb-3"></i>
+                            <h5 class="card-title">Achievements</h5>
+                            <p class="card-text">Milestones and accomplishments in my journey</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card text-center h-100">
+                        <div class="card-body">
+                            <i class="fas fa-code fa-2x text-info mb-3"></i>
+                            <h5 class="card-title">Skills</h5>
+                            <p class="card-text">Continuous learning and skill development</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Convert newlines to line breaks for better display
+document.addEventListener('DOMContentLoaded', function() {
+    const content = document.querySelector('.content');
+    if (content) {
+        content.innerHTML = content.innerHTML.replace(/\n/g, '<br>');
+    }
+});
+</script>
+{% endblock %}

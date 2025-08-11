@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+
+{% block title %}Achievements - Portfolio{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header -->
+    <div class="row mb-5">
+        <div class="col">
+            <h1 class="display-5 fw-bold mb-3">Achievements</h1>
+            <p class="lead text-muted">Milestones and accomplishments in my journey</p>
+        </div>
+    </div>
+    
+    <!-- Filters -->
+    {% if categories %}
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <form method="GET" class="row g-3 align-items-center">
+                        <div class="col-md-6">
+                            <label for="category" class="form-label">Filter by Category</label>
+                            <select class="form-select" id="category" name="category">
+                                <option value="">All Categories</option>
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}" 
+                                            {% if selected_category == category.id %}selected{% endif %}>
+                                        {{ category.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">&nbsp;</label>
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-filter me-2"></i>Filter
+                                </button>
+                                <a href="{{ url_for('achievements') }}" class="btn btn-outline-secondary">
+                                    <i class="fas fa-times me-2"></i>Clear
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Achievements Timeline -->
+    {% if achievements %}
+        <div class="row">
+            <div class="col">
+                <div class="timeline">
+                    {% for achievement in achievements %}
+                        <div class="timeline-item mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        {% if achievement.image_url %}
+                                            <div class="col-md-3 mb-3 mb-md-0">
+                                                <img src="{{ url_for('static', filename='uploads/' + achievement.image_url) }}" 
+                                                     class="img-fluid rounded" style="max-height: 200px; object-fit: cover;">
+                                            </div>
+                                        {% endif %}
+                                        
+                                        <div class="{{ 'col-md-9' if achievement.image_url else 'col-12' }}">
+                                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                                <h4 class="card-title">{{ achievement.title }}</h4>
+                                                <div class="text-end">
+                                                    <div class="text-muted small">{{ achievement.date_achieved.strftime('%B %Y') }}</div>
+                                                    {% if achievement.category %}
+                                                        <span class="badge mt-1" style="background-color: {{ achievement.category.color }}">
+                                                            {{ achievement.category.name }}
+                                                        </span>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            
+                                            {% if achievement.organization %}
+                                                <h6 class="text-muted mb-3">
+                                                    <i class="fas fa-building me-2"></i>{{ achievement.organization }}
+                                                </h6>
+                                            {% endif %}
+                                            
+                                            <p class="card-text">{{ achievement.description }}</p>
+                                            
+                                            {% if achievement.certificate_url %}
+                                                <div class="mt-3">
+                                                    <a href="{{ achievement.certificate_url }}" target="_blank" 
+                                                       class="btn btn-outline-primary">
+                                                        <i class="fas fa-certificate me-2"></i>View Certificate
+                                                    </a>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Results Info -->
+                <div class="text-center mt-4">
+                    <p class="text-muted">
+                        Showing {{ achievements|length }} achievement{{ 's' if achievements|length != 1 else '' }}
+                        {% if selected_category %}
+                            in {{ categories|selectattr('id', 'equalto', selected_category)|first.name }}
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <div class="text-muted">
+                <i class="fas fa-trophy fa-3x mb-3 d-block"></i>
+                <h5>No achievements found</h5>
+                {% if selected_category %}
+                    <p>Try selecting a different category or <a href="{{ url_for('achievements') }}">view all achievements</a>.</p>
+                {% else %}
+                    <p>Achievements will appear here once they are published.</p>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block head %}
+<style>
+.timeline {
+    position: relative;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--bs-border-color);
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 60px;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: 12px;
+    top: 20px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--bs-warning);
+    border: 3px solid var(--bs-body-bg);
+    z-index: 1;
+}
+
+@media (max-width: 768px) {
+    .timeline::before {
+        display: none;
+    }
+    
+    .timeline-item {
+        padding-left: 0;
+    }
+    
+    .timeline-item::before {
+        display: none;
+    }
+}
+</style>
+{% endblock %}

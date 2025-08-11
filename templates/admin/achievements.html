@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Achievements - Admin{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1><i class="fas fa-trophy me-2"></i>Manage Achievements</h1>
+                    <p class="text-muted">Showcase your accomplishments and milestones</p>
+                </div>
+                <a href="{{ url_for('admin_achievement_new') }}" class="btn btn-success">
+                    <i class="fas fa-plus me-2"></i>New Achievement
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    {% if achievements %}
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Organization</th>
+                                <th>Category</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for achievement in achievements %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            {% if achievement.image_url %}
+                                                <img src="{{ url_for('static', filename='uploads/' + achievement.image_url) }}" 
+                                                     class="rounded me-3" width="50" height="50" style="object-fit: cover;">
+                                            {% else %}
+                                                <div class="bg-warning rounded me-3 d-flex align-items-center justify-content-center" 
+                                                     style="width: 50px; height: 50px;">
+                                                    <i class="fas fa-trophy text-dark"></i>
+                                                </div>
+                                            {% endif %}
+                                            <div>
+                                                <h6 class="mb-0">{{ achievement.title }}</h6>
+                                                <small class="text-muted">{{ achievement.description[:50] }}...</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {% if achievement.organization %}
+                                            {{ achievement.organization }}
+                                        {% else %}
+                                            <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if achievement.category %}
+                                            <span class="badge" style="background-color: {{ achievement.category.color }}">
+                                                {{ achievement.category.name }}
+                                            </span>
+                                        {% else %}
+                                            <span class="text-muted">No category</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <small class="text-muted">{{ achievement.date_achieved.strftime('%m/%d/%Y') }}</small>
+                                    </td>
+                                    <td>
+                                        {% if achievement.is_published %}
+                                            <span class="badge bg-success">Published</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Draft</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a href="{{ url_for('admin_achievement_edit', id=achievement.id) }}" 
+                                               class="btn btn-outline-secondary btn-sm">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            {% if achievement.certificate_url %}
+                                                <a href="{{ achievement.certificate_url }}" 
+                                                   class="btn btn-outline-info btn-sm" target="_blank">
+                                                    <i class="fas fa-certificate"></i>
+                                                </a>
+                                            {% endif %}
+                                            <button class="btn btn-outline-danger btn-sm" 
+                                                    onclick="deleteAchievement({{ achievement.id }}, '{{ achievement.title }}')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <div class="text-muted">
+                <i class="fas fa-trophy fa-3x mb-3 d-block"></i>
+                <h5>No achievements yet</h5>
+                <p>Start showcasing your accomplishments by adding your first achievement.</p>
+                <a href="{{ url_for('admin_achievement_new') }}" class="btn btn-success">
+                    <i class="fas fa-plus me-2"></i>Add First Achievement
+                </a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete "<span id="deleteAchievementTitle"></span>"?</p>
+                <p class="text-muted">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="POST" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">Delete Achievement</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function deleteAchievement(achievementId, achievementTitle) {
+    document.getElementById('deleteAchievementTitle').textContent = achievementTitle;
+    document.getElementById('deleteForm').action = `/admin/achievements/${achievementId}/delete`;
+    
+    const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    modal.show();
+}
+</script>
+{% endblock %}

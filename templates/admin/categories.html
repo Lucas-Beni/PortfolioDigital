@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Categories - Admin{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h1><i class="fas fa-tags me-2"></i>Manage Categories</h1>
+            <p class="text-muted">Organize your projects and achievements</p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-8">
+            {% if categories %}
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Existing Categories</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Category</th>
+                                        <th>Projects</th>
+                                        <th>Achievements</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for category in categories %}
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="rounded me-3" 
+                                                         style="width: 20px; height: 20px; background-color: {{ category.color }}"></div>
+                                                    <span class="fw-semibold">{{ category.name }}</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-primary">{{ category.projects.count() }}</span>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-success">{{ category.achievements.count() }}</span>
+                                            </td>
+                                            <td>
+                                                {% if category.projects.count() == 0 and category.achievements.count() == 0 %}
+                                                    <button class="btn btn-outline-danger btn-sm" 
+                                                            onclick="deleteCategory({{ category.id }}, '{{ category.name }}')">
+                                                        <i class="fas fa-trash"></i> Delete
+                                                    </button>
+                                                {% else %}
+                                                    <small class="text-muted">In use</small>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <div class="text-muted">
+                        <i class="fas fa-tags fa-3x mb-3 d-block"></i>
+                        <h5>No categories yet</h5>
+                        <p>Create categories to organize your projects and achievements.</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Add New Category</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('admin_category_new') }}">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="mb-3">
+                            {{ form.name.label(class="form-label") }}
+                            {{ form.name(class="form-control" + (" is-invalid" if form.name.errors else ""), placeholder="e.g., Web Development") }}
+                            {% if form.name.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.name.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.color.label(class="form-label") }}
+                            <div class="d-flex gap-2">
+                                {{ form.color(class="form-control", type="color", style="max-width: 60px") }}
+                                <div class="flex-grow-1">
+                                    <input type="text" class="form-control" id="colorHex" value="#007bff" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-plus me-2"></i>Add Category
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="mb-0">Suggested Categories</h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex flex-wrap gap-2">
+                        <span class="badge bg-primary category-suggestion" data-name="Web Development" data-color="#007bff">Web Development</span>
+                        <span class="badge bg-success category-suggestion" data-name="Mobile Apps" data-color="#28a745">Mobile Apps</span>
+                        <span class="badge bg-info category-suggestion" data-name="Data Science" data-color="#17a2b8">Data Science</span>
+                        <span class="badge bg-warning category-suggestion" data-name="Machine Learning" data-color="#ffc107">Machine Learning</span>
+                        <span class="badge bg-danger category-suggestion" data-name="Game Development" data-color="#dc3545">Game Development</span>
+                        <span class="badge bg-secondary category-suggestion" data-name="APIs" data-color="#6c757d">APIs</span>
+                        <span class="badge bg-dark category-suggestion" data-name="DevOps" data-color="#343a40">DevOps</span>
+                    </div>
+                    <small class="text-muted mt-2 d-block">Click on a suggestion to use it</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the category "<span id="deleteCategoryName"></span>"?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="POST" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">Delete Category</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const colorInput = document.getElementById('color');
+    const colorHex = document.getElementById('colorHex');
+    
+    // Update hex display when color changes
+    colorInput.addEventListener('input', function() {
+        colorHex.value = this.value;
+    });
+    
+    // Category suggestions
+    document.querySelectorAll('.category-suggestion').forEach(function(badge) {
+        badge.addEventListener('click', function() {
+            document.getElementById('name').value = this.dataset.name;
+            colorInput.value = this.dataset.color;
+            colorHex.value = this.dataset.color;
+        });
+    });
+});
+
+function deleteCategory(categoryId, categoryName) {
+    document.getElementById('deleteCategoryName').textContent = categoryName;
+    document.getElementById('deleteForm').action = `/admin/categories/${categoryId}/delete`;
+    
+    const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    modal.show();
+}
+</script>
+{% endblock %}

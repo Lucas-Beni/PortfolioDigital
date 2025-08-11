@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+
+{% block title %}Portfolio - Home{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-primary text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">Welcome to My Portfolio</h1>
+                <p class="lead mb-4">
+                    {% if about_me and about_me.content %}
+                        {{ about_me.content[:200] }}{% if about_me.content|length > 200 %}...{% endif %}
+                    {% else %}
+                        Passionate developer creating innovative solutions and sharing my journey through code.
+                    {% endif %}
+                </p>
+                <div class="d-flex gap-3">
+                    <a href="{{ url_for('projects') }}" class="btn btn-light btn-lg">
+                        <i class="fas fa-folder me-2"></i>View Projects
+                    </a>
+                    <a href="{{ url_for('about') }}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-user me-2"></i>About Me
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center">
+                {% if about_me and about_me.profile_image %}
+                    <img src="{{ url_for('static', filename='uploads/' + about_me.profile_image) }}" 
+                         class="img-fluid rounded-circle shadow" 
+                         style="max-width: 250px; width: 100%; object-fit: cover; aspect-ratio: 1/1;">
+                {% else %}
+                    <div class="bg-secondary rounded-circle mx-auto d-flex align-items-center justify-content-center" 
+                         style="width: 250px; height: 250px;">
+                        <i class="fas fa-user fa-5x text-light"></i>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Projects -->
+{% if featured_projects %}
+<section class="py-5">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col">
+                <h2 class="h3 fw-bold">Featured Projects</h2>
+                <p class="text-muted">Highlighting my best work</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            {% for project in featured_projects %}
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 shadow-sm">
+                    {% if project.image_url %}
+                        <img src="{{ url_for('static', filename='uploads/' + project.image_url) }}" 
+                             class="card-img-top" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                        <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" 
+                             style="height: 200px;">
+                            <i class="fas fa-project-diagram fa-3x text-light"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ project.title }}</h5>
+                        <p class="card-text flex-grow-1">{{ project.description[:150] }}{% if project.description|length > 150 %}...{% endif %}</p>
+                        
+                        {% if project.tech_list %}
+                            <div class="mb-3">
+                                {% for tech in project.tech_list[:3] %}
+                                    <span class="badge bg-secondary me-1">{{ tech }}</span>
+                                {% endfor %}
+                                {% if project.tech_list|length > 3 %}
+                                    <span class="badge bg-info">+{{ project.tech_list|length - 3 }}</span>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <div class="text-muted small">
+                                <i class="fas fa-heart me-1"></i>{{ project.like_count }}
+                                <i class="fas fa-comment ms-2 me-1"></i>{{ project.comment_count }}
+                            </div>
+                            <a href="{{ url_for('project_detail', id=project.id) }}" class="btn btn-primary btn-sm">
+                                View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Recent Projects -->
+<section class="py-5 bg-dark">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col">
+                <h2 class="h3 fw-bold text-light">Recent Projects</h2>
+                <p class="text-muted">Latest additions to my portfolio</p>
+            </div>
+        </div>
+        
+        {% if recent_projects %}
+            <div class="row g-4">
+                {% for project in recent_projects %}
+                <div class="col-lg-4 col-md-6">
+                    <div class="card h-100 bg-secondary">
+                        {% if project.image_url %}
+                            <img src="{{ url_for('static', filename='uploads/' + project.image_url) }}" 
+                                 class="card-img-top" style="height: 180px; object-fit: cover;">
+                        {% endif %}
+                        
+                        <div class="card-body d-flex flex-column">
+                            <h6 class="card-title">{{ project.title }}</h6>
+                            <p class="card-text small flex-grow-1">{{ project.description[:100] }}{% if project.description|length > 100 %}...{% endif %}</p>
+                            
+                            <div class="d-flex justify-content-between align-items-center mt-auto">
+                                <small class="text-muted">
+                                    <i class="fas fa-heart me-1"></i>{{ project.like_count }}
+                                </small>
+                                <a href="{{ url_for('project_detail', id=project.id) }}" class="btn btn-primary btn-sm">
+                                    View
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="text-center mt-4">
+                <a href="{{ url_for('projects') }}" class="btn btn-outline-light">
+                    View All Projects <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <div class="text-muted">
+                    <i class="fas fa-folder-open fa-3x mb-3 d-block"></i>
+                    <h5>No projects available</h5>
+                    <p>Projects will appear here once they are published.</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="h3 fw-bold mb-3">Let's Work Together</h2>
+                <p class="lead text-muted mb-4">
+                    Interested in collaborating or have a project in mind? Let's connect and create something amazing together.
+                </p>
+                {% if not current_user.is_authenticated %}
+                    <a href="{{ url_for('replit_auth.login') }}" class="btn btn-primary btn-lg me-3">
+                        <i class="fas fa-sign-in-alt me-2"></i>Join the Community
+                    </a>
+                {% endif %}
+                <a href="{{ url_for('about') }}" class="btn btn-outline-primary btn-lg">
+                    <i class="fas fa-envelope me-2"></i>Get in Touch
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

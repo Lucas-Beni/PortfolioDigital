@@ -1,0 +1,422 @@
+from flask import render_template, redirect, url_for, flash, request, jsonify, session
+from flask_login import current_user
+from sqlalchemy import desc, or_
+from datetime import datetime
+
+from app import app, db
+from replit_auth import require_login, require_admin, make_replit_blueprint
+from models import User, Project, Achievement, Category, Comment, Like, AboutMe
+from forms import ProjectForm, AchievementForm, CategoryForm, CommentForm, AboutMeForm
+from utils import save_uploaded_file, delete_file
+
+# Register authentication blueprint
+app.register_blueprint(make_replit_blueprint(), url_prefix="/auth")
+
+# Make session permanent
+@app.before_request
+def make_session_permanent():
+    session.permanent = True
+
+# Public Routes
+@app.route('/')
+def index():
+    """Homepage showing featured and recent projects"""
+    featured_projects = Project.query.filter_by(is_published=True, is_featured=True).limit(3).all()
+    recent_projects = Project.query.filter_by(is_published=True).order_by(desc(Project.created_at)).limit(6).all()
+    
+    # Get about me info for homepage
+    about_me = AboutMe.query.first()
+    
+    return render_template('index.html', 
+                         featured_projects=featured_projects,
+                         recent_projects=recent_projects,
+                         about_me=about_me)
+
+@app.route('/projects')
+def projects():
+    """View all published projects with filtering"""
+    category_id = request.args.get('category', type=int)
+    search = request.args.get('search', '').strip()
+    
+    query = Project.query.filter_by(is_published=True)
+    
+    if category_id:
+        query = query.filter_by(category_id=category_id)
+    
+    if search:
+        query = query.filter(or_(
+            Project.title.contains(search),
+            Project.description.contains(search),
+            Project.technologies.contains(search)
+        ))
+    
+    projects = query.order_by(desc(Project.created_at)).all()
+    categories = Category.query.all()
+    
+    return render_template('projects.html', 
+                         projects=projects, 
+                         categories=categories,
+                         selected_category=category_id,
+                         search_term=search)
+
+@app.route('/project/<int:id>')
+def project_detail(id):
+    """View individual project with comments"""
+    project = Project.query.get_or_404(id)
+    
+    if not project.is_published:
+        if not current_user.is_authenticated or not current_user.is_admin:
+            flash('Project not found.', 'error')
+            return redirect(url_for('projects'))
+    
+    comments = Comment.query.filter_by(project_id=id, is_approved=True).order_by(Comment.created_at).all()
+    comment_form = CommentForm()
+    
+    return render_template('project_detail.html', 
+                         project=project, 
+                         comments=comments,
+                         comment_form=comment_form)
+
+@app.route('/achievements')
+def achievements():
+    """View all published achievements"""
+    category_id = request.args.get('category', type=int)
+    
+    query = Achievement.query.filter_by(is_published=True)
+    
+    if category_id:
+        query = query.filter_by(category_id=category_id)
+    
+    achievements = query.order_by(desc(Achievement.date_achieved)).all()
+    categories = Category.query.all()
+    
+    return render_template('achievements.html', 
+                         achievements=achievements, 
+                         categories=categories,
+                         selected_category=category_id)
+
+@app.route('/about')
+def about():
+    """About me page"""
+    about_me = AboutMe.query.first()
+    if not about_me:
+        about_me = AboutMe(content="Welcome to my portfolio! More information coming soon.")
+    
+    return render_template('about.html', about_me=about_me)
+
+# Interactive Routes (require login)
+@app.route('/project/<int:id>/comment', methods=['POST'])
+@require_login
+def add_comment(id):
+    """Add comment to project"""
+    project = Project.query.get_or_404(id)
+    form = CommentForm()
+    
+    if form.validate_on_submit():
+        comment = Comment(
+            content=form.content.data,
+            user_id=current_user.id,
+            project_id=id
+        )
+        db.session.add(comment)
+        db.session.commit()
+        flash('Comment added successfully!', 'success')
+    else:
+        flash('Error adding comment. Please try again.', 'error')
+    
+    return redirect(url_for('project_detail', id=id))
+
+@app.route('/project/<int:id>/like', methods=['POST'])
+@require_login
+def toggle_like(id):
+    """Toggle like for project"""
+    project = Project.query.get_or_404(id)
+    
+    existing_like = Like.query.filter_by(user_id=current_user.id, project_id=id).first()
+    
+    if existing_like:
+        db.session.delete(existing_like)
+        liked = False
+    else:
+        like = Like(user_id=current_user.id, project_id=id)
+        db.session.add(like)
+        liked = True
+    
+    db.session.commit()
+    
+    return jsonify({
+        'liked': liked,
+        'like_count': project.like_count
+    })
+
+# Admin Routes
+@app.route('/admin')
+@require_admin
+def admin_dashboard():
+    """Admin dashboard"""
+    stats = {
+        'projects': Project.query.count(),
+        'published_projects': Project.query.filter_by(is_published=True).count(),
+        'achievements': Achievement.query.count(),
+        'categories': Category.query.count(),
+        'comments': Comment.query.count(),
+        'likes': Like.query.count()
+    }
+    
+    recent_comments = Comment.query.order_by(desc(Comment.created_at)).limit(5).all()
+    
+    return render_template('admin/dashboard.html', stats=stats, recent_comments=recent_comments)
+
+@app.route('/admin/projects')
+@require_admin
+def admin_projects():
+    """Admin projects list"""
+    projects = Project.query.order_by(desc(Project.created_at)).all()
+    return render_template('admin/projects.html', projects=projects)
+
+@app.route('/admin/projects/new', methods=['GET', 'POST'])
+@require_admin
+def admin_project_new():
+    """Create new project"""
+    form = ProjectForm()
+    
+    if form.validate_on_submit():
+        project = Project(
+            title=form.title.data,
+            description=form.description.data,
+            content=form.content.data,
+            demo_url=form.demo_url.data,
+            github_url=form.github_url.data,
+            technologies=form.technologies.data,
+            category_id=form.category_id.data if form.category_id.data != 0 else None,
+            is_published=form.is_published.data,
+            is_featured=form.is_featured.data
+        )
+        
+        # Handle file upload
+        if form.image.data:
+            filename = save_uploaded_file(form.image.data, 'projects')
+            if filename:
+                project.image_url = filename
+        
+        db.session.add(project)
+        db.session.commit()
+        flash('Project created successfully!', 'success')
+        return redirect(url_for('admin_projects'))
+    
+    return render_template('admin/project_form.html', form=form, title='New Project')
+
+@app.route('/admin/projects/<int:id>/edit', methods=['GET', 'POST'])
+@require_admin
+def admin_project_edit(id):
+    """Edit project"""
+    project = Project.query.get_or_404(id)
+    form = ProjectForm(obj=project)
+    
+    if form.validate_on_submit():
+        old_image = project.image_url
+        
+        form.populate_obj(project)
+        project.category_id = form.category_id.data if form.category_id.data != 0 else None
+        project.updated_at = datetime.now()
+        
+        # Handle file upload
+        if form.image.data:
+            filename = save_uploaded_file(form.image.data, 'projects')
+            if filename:
+                if old_image:
+                    delete_file(old_image)
+                project.image_url = filename
+        
+        db.session.commit()
+        flash('Project updated successfully!', 'success')
+        return redirect(url_for('admin_projects'))
+    
+    return render_template('admin/project_form.html', form=form, project=project, title='Edit Project')
+
+@app.route('/admin/projects/<int:id>/delete', methods=['POST'])
+@require_admin
+def admin_project_delete(id):
+    """Delete project"""
+    project = Project.query.get_or_404(id)
+    
+    # Delete associated image
+    if project.image_url:
+        delete_file(project.image_url)
+    
+    db.session.delete(project)
+    db.session.commit()
+    flash('Project deleted successfully!', 'success')
+    return redirect(url_for('admin_projects'))
+
+@app.route('/admin/achievements')
+@require_admin
+def admin_achievements():
+    """Admin achievements list"""
+    achievements = Achievement.query.order_by(desc(Achievement.date_achieved)).all()
+    return render_template('admin/achievements.html', achievements=achievements)
+
+@app.route('/admin/achievements/new', methods=['GET', 'POST'])
+@require_admin
+def admin_achievement_new():
+    """Create new achievement"""
+    form = AchievementForm()
+    
+    if form.validate_on_submit():
+        achievement = Achievement(
+            title=form.title.data,
+            description=form.description.data,
+            date_achieved=form.date_achieved.data,
+            certificate_url=form.certificate_url.data,
+            organization=form.organization.data,
+            category_id=form.category_id.data if form.category_id.data != 0 else None,
+            is_published=form.is_published.data
+        )
+        
+        # Handle file upload
+        if form.image.data:
+            filename = save_uploaded_file(form.image.data, 'achievements')
+            if filename:
+                achievement.image_url = filename
+        
+        db.session.add(achievement)
+        db.session.commit()
+        flash('Achievement created successfully!', 'success')
+        return redirect(url_for('admin_achievements'))
+    
+    return render_template('admin/achievement_form.html', form=form, title='New Achievement')
+
+@app.route('/admin/achievements/<int:id>/edit', methods=['GET', 'POST'])
+@require_admin
+def admin_achievement_edit(id):
+    """Edit achievement"""
+    achievement = Achievement.query.get_or_404(id)
+    form = AchievementForm(obj=achievement)
+    
+    if form.validate_on_submit():
+        old_image = achievement.image_url
+        
+        form.populate_obj(achievement)
+        achievement.category_id = form.category_id.data if form.category_id.data != 0 else None
+        achievement.updated_at = datetime.now()
+        
+        # Handle file upload
+        if form.image.data:
+            filename = save_uploaded_file(form.image.data, 'achievements')
+            if filename:
+                if old_image:
+                    delete_file(old_image)
+                achievement.image_url = filename
+        
+        db.session.commit()
+        flash('Achievement updated successfully!', 'success')
+        return redirect(url_for('admin_achievements'))
+    
+    return render_template('admin/achievement_form.html', form=form, achievement=achievement, title='Edit Achievement')
+
+@app.route('/admin/achievements/<int:id>/delete', methods=['POST'])
+@require_admin
+def admin_achievement_delete(id):
+    """Delete achievement"""
+    achievement = Achievement.query.get_or_404(id)
+    
+    # Delete associated image
+    if achievement.image_url:
+        delete_file(achievement.image_url)
+    
+    db.session.delete(achievement)
+    db.session.commit()
+    flash('Achievement deleted successfully!', 'success')
+    return redirect(url_for('admin_achievements'))
+
+@app.route('/admin/categories')
+@require_admin
+def admin_categories():
+    """Admin categories list"""
+    categories = Category.query.all()
+    form = CategoryForm()
+    return render_template('admin/categories.html', categories=categories, form=form)
+
+@app.route('/admin/categories/new', methods=['POST'])
+@require_admin
+def admin_category_new():
+    """Create new category"""
+    form = CategoryForm()
+    
+    if form.validate_on_submit():
+        category = Category(
+            name=form.name.data,
+            color=form.color.data
+        )
+        db.session.add(category)
+        db.session.commit()
+        flash('Category created successfully!', 'success')
+    else:
+        flash('Error creating category.', 'error')
+    
+    return redirect(url_for('admin_categories'))
+
+@app.route('/admin/categories/<int:id>/delete', methods=['POST'])
+@require_admin
+def admin_category_delete(id):
+    """Delete category"""
+    category = Category.query.get_or_404(id)
+    
+    # Check if category is in use
+    if category.projects.count() > 0 or category.achievements.count() > 0:
+        flash('Cannot delete category that is in use.', 'error')
+    else:
+        db.session.delete(category)
+        db.session.commit()
+        flash('Category deleted successfully!', 'success')
+    
+    return redirect(url_for('admin_categories'))
+
+@app.route('/admin/about', methods=['GET', 'POST'])
+@require_admin
+def admin_about_edit():
+    """Edit about me section"""
+    about_me = AboutMe.query.first()
+    if not about_me:
+        about_me = AboutMe(content="")
+    
+    form = AboutMeForm(obj=about_me)
+    
+    if form.validate_on_submit():
+        old_image = about_me.profile_image
+        
+        form.populate_obj(about_me)
+        about_me.updated_at = datetime.now()
+        
+        # Handle file upload
+        if form.profile_image.data:
+            filename = save_uploaded_file(form.profile_image.data, 'profile')
+            if filename:
+                if old_image:
+                    delete_file(old_image)
+                about_me.profile_image = filename
+        
+        if about_me.id:
+            db.session.commit()
+        else:
+            db.session.add(about_me)
+            db.session.commit()
+        
+        flash('About section updated successfully!', 'success')
+        return redirect(url_for('admin_about_edit'))
+    
+    return render_template('admin/about_edit.html', form=form, about_me=about_me)
+
+# Error handlers
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('404.html'), 404
+
+@app.errorhandler(403)
+def forbidden_error(error):
+    return render_template('403.html'), 403
+
+@app.errorhandler(500)
+def internal_error(error):
+    db.session.rollback()
+    return render_template('500.html'), 500
