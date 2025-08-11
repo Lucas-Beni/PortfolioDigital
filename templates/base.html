@@ -70,14 +70,30 @@
                                 {{ current_user.display_name }}
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{ url_for('replit_auth.logout') }}">Logout</a></li>
+                                {% if current_user.auth_type == 'replit' %}
+                                    <li><a class="dropdown-item" href="{{ url_for('replit_auth.logout') }}">Logout</a></li>
+                                {% else %}
+                                    <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
+                                {% endif %}
                             </ul>
                         </li>
                     {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('replit_auth.login') }}">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                 <i class="fas fa-sign-in-alt me-1"></i>Login
                             </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{ url_for('login') }}">
+                                    <i class="fas fa-envelope me-2"></i>Email Login
+                                </a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('register') }}">
+                                    <i class="fas fa-user-plus me-2"></i>Create Account
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ url_for('replit_auth.login') }}">
+                                    <i class="fas fa-code me-2"></i>Continue with Replit
+                                </a></li>
+                            </ul>
                         </li>
                     {% endif %}
                 </ul>

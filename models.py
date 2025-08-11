@@ -9,10 +9,12 @@ class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.String, primary_key=True)
     email = db.Column(db.String, unique=True, nullable=True)
+    password_hash = db.Column(db.String(256), nullable=True)  # For local auth
     first_name = db.Column(db.String, nullable=True)
     last_name = db.Column(db.String, nullable=True)
     profile_image_url = db.Column(db.String, nullable=True)
     is_admin = db.Column(db.Boolean, default=False)
+    auth_type = db.Column(db.String(20), default='replit')  # 'replit' or 'local'
 
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
@@ -33,6 +35,28 @@ class User(UserMixin, db.Model):
         elif self.email:
             return self.email.split('@')[0]
         return "Anonymous User"
+    
+    def set_password(self, password):
+        from werkzeug.security import generate_password_hash
+        self.password_hash = generate_password_hash(password)
+    
+    def check_password(self, password):
+        from werkzeug.security import check_password_hash
+        if not self.password_hash:
+            return False
+        return check_password_hash(self.password_hash, password)
+    
+    @staticmethod
+    def create_local_user(email, password, first_name=None, last_name=None):
+        import uuid
+        user = User()
+        user.id = str(uuid.uuid4())
+        user.email = email
+        user.first_name = first_name
+        user.last_name = last_name
+        user.auth_type = 'local'
+        user.set_password(password)
+        return user
 
 # (IMPORTANT) This table is mandatory for Replit Auth, don't drop it.
 class OAuth(OAuthConsumerMixin, db.Model):

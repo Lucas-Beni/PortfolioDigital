@@ -1,12 +1,13 @@
 from flask import render_template, redirect, url_for, flash, request, jsonify, session
-from flask_login import current_user
+from flask_login import current_user, login_user, logout_user
 from sqlalchemy import desc, or_
 from datetime import datetime
+import urllib.parse
 
 from app import app, db
 from replit_auth import require_login, require_admin, make_replit_blueprint
 from models import User, Project, Achievement, Category, Comment, Like, AboutMe
-from forms import ProjectForm, AchievementForm, CategoryForm, CommentForm, AboutMeForm
+from forms import ProjectForm, AchievementForm, CategoryForm, CommentForm, AboutMeForm, LoginForm, RegisterForm, ShareForm
 from utils import save_uploaded_file, delete_file
 
 # Register authentication blueprint
@@ -16,6 +17,54 @@ app.register_blueprint(make_replit_blueprint(), url_prefix="/auth")
 @app.before_request
 def make_session_permanent():
     session.permanent = True
+
+# Authentication Routes (Local Login/Register)
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    """Local login page"""
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user and user.check_password(form.password.data):
+            login_user(user)
+            next_page = request.args.get('next')
+            flash('Login successful!', 'success')
+            return redirect(next_page) if next_page else redirect(url_for('index'))
+        else:
+            flash('Invalid email or password.', 'error')
+    
+    return render_template('auth/login.html', form=form)
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    """Local registration page"""
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    
+    form = RegisterForm()
+    if form.validate_on_submit():
+        user = User.create_local_user(
+            email=form.email.data,
+            password=form.password.data,
+            first_name=form.first_name.data,
+            last_name=form.last_name.data
+        )
+        db.session.add(user)
+        db.session.commit()
+        flash('Registration successful! You can now log in.', 'success')
+        return redirect(url_for('login'))
+    
+    return render_template('auth/register.html', form=form)
+
+@app.route('/logout')
+def logout():
+    """Logout for local users"""
+    logout_user()
+    flash('You have been logged out.', 'info')
+    return redirect(url_for('index'))
 
 # Public Routes
 @app.route('/')
@@ -100,7 +149,8 @@ def about():
     """About me page"""
     about_me = AboutMe.query.first()
     if not about_me:
-        about_me = AboutMe(content="Welcome to my portfolio! More information coming soon.")
+        about_me = AboutMe()
+        about_me.content = "Welcome to my portfolio! More information coming soon."
     
     return render_template('about.html', about_me=about_me)
 
@@ -113,11 +163,10 @@ def add_comment(id):
     form = CommentForm()
     
     if form.validate_on_submit():
-        comment = Comment(
-            content=form.content.data,
-            user_id=current_user.id,
-            project_id=id
-        )
+        comment = Comment()
+        comment.content = form.content.data
+        comment.user_id = current_user.id
+        comment.project_id = id
         db.session.add(comment)
         db.session.commit()
         flash('Comment added successfully!', 'success')
@@ -138,7 +187,9 @@ def toggle_like(id):
         db.session.delete(existing_like)
         liked = False
     else:
-        like = Like(user_id=current_user.id, project_id=id)
+        like = Like()
+        like.user_id = current_user.id
+        like.project_id = id
         db.session.add(like)
         liked = True
     
@@ -148,6 +199,49 @@ def toggle_like(id):
         'liked': liked,
         'like_count': project.like_count
     })
+
+# LinkedIn Sharing Route
+@app.route('/project/<int:id>/share', methods=['GET', 'POST'])
+@require_login
+def share_project(id):
+    """Share project on LinkedIn with personalized message"""
+    project = Project.query.get_or_404(id)
+    
+    if not project.is_published:
+        flash('Project not available for sharing.', 'error')
+        return redirect(url_for('projects'))
+    
+    form = ShareForm()
+    
+    if form.validate_on_submit():
+        # Generate LinkedIn sharing URL
+        project_url = url_for('project_detail', id=project.id, _external=True)
+        
+        # Create sharing message
+        share_text = f"Check out this amazing project: {project.title}\n\n{project.description}"
+        if form.message.data:
+            share_text += f"\n\nPersonal note: {form.message.data}"
+        
+        share_text += f"\n\n#portfolio #webdevelopment"
+        if project.technologies:
+            techs = [tech.strip().replace(' ', '').lower() for tech in project.technologies.split(',')][:3]
+            for tech in techs:
+                share_text += f" #{tech}"
+        
+        # LinkedIn sharing URL
+        linkedin_params = {
+            'mini': 'true',
+            'url': project_url,
+            'title': project.title,
+            'summary': share_text,
+            'source': 'Portfolio'
+        }
+        
+        linkedin_url = 'https://www.linkedin.com/sharing/share-offsite/?' + urllib.parse.urlencode(linkedin_params)
+        
+        return redirect(linkedin_url)
+    
+    return render_template('share_project.html', project=project, form=form)
 
 # Admin Routes
 @app.route('/admin')
@@ -181,17 +275,16 @@ def admin_project_new():
     form = ProjectForm()
     
     if form.validate_on_submit():
-        project = Project(
-            title=form.title.data,
-            description=form.description.data,
-            content=form.content.data,
-            demo_url=form.demo_url.data,
-            github_url=form.github_url.data,
-            technologies=form.technologies.data,
-            category_id=form.category_id.data if form.category_id.data != 0 else None,
-            is_published=form.is_published.data,
-            is_featured=form.is_featured.data
-        )
+        project = Project()
+        project.title = form.title.data
+        project.description = form.description.data
+        project.content = form.content.data
+        project.demo_url = form.demo_url.data
+        project.github_url = form.github_url.data
+        project.technologies = form.technologies.data
+        project.category_id = form.category_id.data if form.category_id.data != 0 else None
+        project.is_published = form.is_published.data
+        project.is_featured = form.is_featured.data
         
         # Handle file upload
         if form.image.data:

@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, TextAreaField, SelectField, BooleanField, DateField, URLField
-from wtforms.validators import DataRequired, Length, Optional, URL
-from models import Category
+from wtforms import StringField, TextAreaField, SelectField, BooleanField, DateField, URLField, PasswordField
+from wtforms.validators import DataRequired, Length, Optional, URL, Email, EqualTo, ValidationError
+from models import Category, User
 
 class ProjectForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired(), Length(min=1, max=200)])
@@ -48,3 +48,23 @@ class AboutMeForm(FlaskForm):
     linkedin_url = URLField('LinkedIn URL', validators=[Optional(), URL()])
     github_url = URLField('GitHub URL', validators=[Optional(), URL()])
     website_url = URLField('Website URL', validators=[Optional(), URL()])
+
+# Authentication Forms
+class LoginForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+
+class RegisterForm(FlaskForm):
+    first_name = StringField('First Name', validators=[DataRequired(), Length(min=1, max=100)])
+    last_name = StringField('Last Name', validators=[Optional(), Length(max=100)])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
+    password2 = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        if user:
+            raise ValidationError('Email already registered. Please choose a different one.')
+
+class ShareForm(FlaskForm):
+    message = TextAreaField('Personal Message', validators=[Optional(), Length(max=500)])

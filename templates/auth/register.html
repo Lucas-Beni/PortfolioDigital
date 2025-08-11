@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}Register - Portfolio{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h4 class="mb-0">Create Account</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="mb-3">
+                            {{ form.first_name.label(class="form-label") }}
+                            {{ form.first_name(class="form-control" + (" is-invalid" if form.first_name.errors else "")) }}
+                            {% if form.first_name.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.first_name.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.last_name.label(class="form-label") }}
+                            {{ form.last_name(class="form-control" + (" is-invalid" if form.last_name.errors else "")) }}
+                            {% if form.last_name.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.last_name.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.email.label(class="form-label") }}
+                            {{ form.email(class="form-control" + (" is-invalid" if form.email.errors else "")) }}
+                            {% if form.email.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.email.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.password.label(class="form-label") }}
+                            {{ form.password(class="form-control" + (" is-invalid" if form.password.errors else "")) }}
+                            <small class="form-text text-muted">Minimum 6 characters</small>
+                            {% if form.password.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.password.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.password2.label(class="form-label") }}
+                            {{ form.password2(class="form-control" + (" is-invalid" if form.password2.errors else "")) }}
+                            {% if form.password2.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.password2.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Create Account</button>
+                        </div>
+                    </form>
+                    
+                    <hr>
+                    
+                    <div class="text-center">
+                        <p class="mb-2">Already have an account?</p>
+                        <a href="{{ url_for('login') }}" class="btn btn-outline-secondary">Login</a>
+                    </div>
+                    
+                    <div class="text-center mt-3">
+                        <p class="text-muted">Or</p>
+                        <a href="{{ url_for('replit_auth.login') }}" class="btn btn-outline-info">
+                            <i class="fas fa-code"></i> Continue with Replit
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
