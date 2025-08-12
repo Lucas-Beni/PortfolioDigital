@@ -10,14 +10,37 @@ from auth_decorators import login_required, admin_required
 from models import User, Project, Achievement, Category, Comment, Like, AboutMe
 from forms import ProjectForm, AchievementForm, CategoryForm, CommentForm, AboutMeForm, LoginForm, RegisterForm, ShareForm
 from utils import save_uploaded_file, delete_file
+from translations import get_translation
 
 # Register authentication blueprint
 app.register_blueprint(make_replit_blueprint(), url_prefix="/auth")
 
-# Make session permanent
+# Make session permanent and set language
 @app.before_request
 def make_session_permanent():
     session.permanent = True
+    
+    # Set language from session or default to English
+    if 'language' not in session:
+        session['language'] = 'en'
+
+# Language switching route
+@app.route('/set_language/<language>')
+def set_language(language):
+    """Set the language preference"""
+    if language in ['en', 'pt']:
+        session['language'] = language
+    return redirect(request.referrer or url_for('index'))
+
+# Template context processor for translations
+@app.context_processor
+def inject_translations():
+    """Make translation function available in all templates"""
+    def t(key):
+        lang = session.get('language', 'en')
+        return get_translation(key, lang)
+    
+    return dict(t=t, current_language=session.get('language', 'en'))
 
 # Authentication Routes (Local Login/Register)
 @app.route('/login', methods=['GET', 'POST'])
@@ -229,16 +252,13 @@ def share_project(id):
             for tech in techs:
                 share_text += f" #{tech}"
         
-        # LinkedIn sharing URL
+        # LinkedIn sharing URL (modern approach)
         linkedin_params = {
-            'mini': 'true',
             'url': project_url,
-            'title': project.title,
-            'summary': share_text,
-            'source': 'Portfolio'
+            'text': share_text
         }
         
-        linkedin_url = 'https://www.linkedin.com/sharing/share-offsite/?' + urllib.parse.urlencode(linkedin_params)
+        linkedin_url = 'https://www.linkedin.com/feed/?' + urllib.parse.urlencode(linkedin_params)
         
         return redirect(linkedin_url)
     

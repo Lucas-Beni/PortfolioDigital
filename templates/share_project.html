@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Share {{ project.title }} - Portfolio{% endblock %}
+{% block title %}{{ t('project_share') }} {{ project.title }} - Portfolio{% endblock %}
 
 {% block content %}
 <div class="container py-5">
@@ -7,7 +7,7 @@
         <div class="col-md-8">
             <div class="card shadow">
                 <div class="card-header">
-                    <h4 class="mb-0">Share on LinkedIn</h4>
+                    <h4 class="mb-0">{{ t('share_linkedin') }}</h4>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -28,7 +28,7 @@
                             
                             {% if project.technologies %}
                                 <div class="mb-3">
-                                    <small class="text-muted">Technologies:</small>
+                                    <small class="text-muted">{{ t('technologies_used') }}:</small>
                                     <div>
                                         {% for tech in project.tech_list %}
                                             <span class="badge bg-primary me-1">{{ tech }}</span>
@@ -67,9 +67,9 @@
                                 
                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                     <a href="{{ url_for('project_detail', id=project.id) }}" 
-                                       class="btn btn-outline-secondary me-md-2">Cancel</a>
+                                       class="btn btn-outline-secondary me-md-2">{{ t('cancel') }}</a>
                                     <button type="submit" class="btn btn-primary">
-                                        <i class="fab fa-linkedin"></i> Share on LinkedIn
+                                        <i class="fab fa-linkedin"></i> {{ t('share_linkedin') }}
                                     </button>
                                 </div>
                             </form>
@@ -91,5 +91,15 @@ document.getElementById('{{ form.message.id }}').addEventListener('input', funct
         preview.style.display = 'none';
     }
 });
+
+// Add alternative sharing option
+function shareDirectly() {
+    const projectUrl = '{{ url_for("project_detail", id=project.id, _external=True) }}';
+    const projectTitle = '{{ project.title|safe }}';
+    const projectDescription = '{{ project.description|safe }}';
+    const customMessage = document.getElementById('{{ form.message.id }}').value;
+    
+    Portfolio.shareOnLinkedIn(projectUrl, projectTitle, projectDescription, customMessage);
+}
 </script>
 {% endblock %}

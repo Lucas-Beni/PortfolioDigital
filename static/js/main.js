@@ -17,6 +17,7 @@ function initializeApp() {
     initializeImageLazyLoading();
     initializeSearchDebounce();
     initializeThemeToggle();
+    initializeLanguageSwitch();
 }
 
 /**
@@ -409,6 +410,49 @@ function getFavorites() {
     return JSON.parse(localStorage.getItem('favorites') || '[]');
 }
 
+/**
+ * Share project on LinkedIn with custom text
+ */
+function shareOnLinkedIn(projectUrl, projectTitle, projectDescription, customMessage = '') {
+    let shareText = `Check out this amazing project: ${projectTitle}\n\n${projectDescription}`;
+    
+    if (customMessage.trim()) {
+        shareText += `\n\nPersonal note: ${customMessage}`;
+    }
+    
+    shareText += '\n\n#portfolio #webdevelopment';
+    
+    const linkedInUrl = `https://www.linkedin.com/feed/?linkOrigin=LI_BADGE&shareActive=true&shareUrl=${encodeURIComponent(projectUrl)}&shareCommentary=${encodeURIComponent(shareText)}`;
+    
+    // Open LinkedIn sharing in new window
+    window.open(linkedInUrl, '_blank', 'width=600,height=400,scrollbars=yes,resizable=yes');
+    
+    showToast('Opening LinkedIn sharing...', 'info');
+}
+
+/**
+ * Initialize language switch functionality
+ */
+function initializeLanguageSwitch() {
+    // Store current page to redirect back after language change
+    const languageLinks = document.querySelectorAll('a[href*="/set_language/"]');
+    
+    languageLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            showLoading(e.target);
+            showToast('Changing language...', 'info');
+        });
+    });
+}
+
+/**
+ * Copy project URL to clipboard for sharing
+ */
+function copyProjectUrl(projectId) {
+    const projectUrl = `${window.location.origin}/project/${projectId}`;
+    copyToClipboard(projectUrl);
+}
+
 // Export functions for use in templates
 window.Portfolio = {
     showLoading,
@@ -422,5 +466,7 @@ window.Portfolio = {
     handleLikeButton,
     addToFavorites,
     removeFromFavorites,
-    getFavorites
+    getFavorites,
+    shareOnLinkedIn,
+    copyProjectUrl
 };

@@ -7,6 +7,8 @@ This is a Flask-based portfolio web application designed to showcase projects, a
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
+Language Features: Portuguese/English translation system implemented.
+User requested: Translation system for PT/EN and LinkedIn sharing functionality.
 
 ## System Architecture
 
@@ -17,6 +19,8 @@ Preferred communication style: Simple, everyday language.
 - **JavaScript**: Vanilla JavaScript for enhanced user interactions
 - **Static Assets**: CSS and JavaScript files served from static directory
 - **Image Handling**: PIL (Pillow) for image processing and optimization
+- **Internationalization**: Translation system supporting Portuguese and English
+- **Social Sharing**: LinkedIn integration with custom messaging
 
 ### Backend Architecture
 - **Web Framework**: Flask with modular blueprint structure

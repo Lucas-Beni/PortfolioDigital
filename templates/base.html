@@ -31,25 +31,42 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                        <a class="nav-link" href="{{ url_for('index') }}">{{ t('nav_home') }}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('projects') }}">Projects</a>
+                        <a class="nav-link" href="{{ url_for('projects') }}">{{ t('nav_projects') }}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('achievements') }}">Achievements</a>
+                        <a class="nav-link" href="{{ url_for('achievements') }}">{{ t('nav_achievements') }}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('about') }}">About</a>
+                        <a class="nav-link" href="{{ url_for('about') }}">{{ t('nav_about') }}</a>
                     </li>
                 </ul>
                 
                 <ul class="navbar-nav">
+                    <!-- Language Selector -->
+                    <li class="nav-item dropdown me-2">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-globe me-1"></i>{{ t('language') }}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item{% if current_language == 'en' %} active{% endif %}" 
+                                   href="{{ url_for('set_language', language='en') }}">
+                                <i class="flag-icon flag-icon-us me-2"></i>{{ t('english') }}
+                            </a></li>
+                            <li><a class="dropdown-item{% if current_language == 'pt' %} active{% endif %}" 
+                                   href="{{ url_for('set_language', language='pt') }}">
+                                <i class="flag-icon flag-icon-br me-2"></i>{{ t('portuguese') }}
+                            </a></li>
+                        </ul>
+                    </li>
+                    
                     {% if current_user.is_authenticated %}
                         {% if current_user.is_admin %}
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                                    <i class="fas fa-cog me-1"></i>Admin
+                                    <i class="fas fa-cog me-1"></i>{{ t('nav_admin') }}
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
@@ -71,27 +88,27 @@
                             </a>
                             <ul class="dropdown-menu">
                                 {% if current_user.auth_type == 'replit' %}
-                                    <li><a class="dropdown-item" href="{{ url_for('replit_auth.logout') }}">Logout</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('replit_auth.logout') }}">{{ t('nav_logout') }}</a></li>
                                 {% else %}
-                                    <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('logout') }}">{{ t('nav_logout') }}</a></li>
                                 {% endif %}
                             </ul>
                         </li>
                     {% else %}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                                <i class="fas fa-sign-in-alt me-1"></i>Login
+                                <i class="fas fa-sign-in-alt me-1"></i>{{ t('nav_login') }}
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{{ url_for('login') }}">
-                                    <i class="fas fa-envelope me-2"></i>Email Login
+                                    <i class="fas fa-envelope me-2"></i>{{ t('nav_email_login') }}
                                 </a></li>
                                 <li><a class="dropdown-item" href="{{ url_for('register') }}">
-                                    <i class="fas fa-user-plus me-2"></i>Create Account
+                                    <i class="fas fa-user-plus me-2"></i>{{ t('nav_register') }}
                                 </a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{{ url_for('replit_auth.login') }}">
-                                    <i class="fas fa-code me-2"></i>Continue with Replit
+                                    <i class="fas fa-code me-2"></i>{{ t('nav_replit_login') }}
                                 </a></li>
                             </ul>
                         </li>
