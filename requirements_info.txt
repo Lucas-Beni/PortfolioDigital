@@ -1,0 +1,34 @@
+# Portfolio Application Dependencies
+# This file lists all the required packages for the Flask portfolio application
+
+# Core Framework
+Flask==3.0.0                    # Main web framework
+Flask-SQLAlchemy==3.1.1         # Database ORM
+Flask-Login==0.6.3              # User session management
+Flask-WTF==1.2.1                # Forms and CSRF protection
+Flask-Dance==7.0.0              # OAuth integration
+
+# Database
+psycopg2-binary==2.9.9          # PostgreSQL adapter
+SQLAlchemy==2.0.25              # Database toolkit
+
+# Forms and Validation
+WTForms==3.1.1                  # Form handling
+email-validator==2.1.0.post1    # Email validation
+
+# Security
+Werkzeug==3.0.1                 # WSGI utilities and security
+PyJWT==2.8.0                    # JWT token handling
+oauthlib==3.2.2                 # OAuth implementation
+
+# Image Processing
+Pillow==10.2.0                  # Image manipulation
+
+# Production Server
+gunicorn==23.0.0                # WSGI HTTP Server
+
+# Installation command:
+# pip install -r requirements.txt
+
+# Note: This application is configured to work with Replit's environment.
+# Some packages may be pre-installed in the Replit environment.

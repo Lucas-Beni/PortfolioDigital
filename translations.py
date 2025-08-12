@@ -108,7 +108,7 @@ translations = {
         'nav_projects': 'Projetos',
         'nav_achievements': 'Conquistas',
         'nav_about': 'Sobre',
-        'nav_admin': 'Admin',
+        'nav_admin': 'Administração',
         'nav_login': 'Entrar',
         'nav_logout': 'Sair',
         'nav_register': 'Criar Conta',
@@ -168,7 +168,7 @@ translations = {
         'comment': 'Comentário',
         
         # Admin
-        'admin_dashboard': 'Painel',
+        'admin_dashboard': 'Painel de Controle',
         'manage_projects': 'Gerenciar Projetos',
         'manage_achievements': 'Gerenciar Conquistas',
         'manage_categories': 'Categorias',
@@ -176,6 +176,15 @@ translations = {
         'add_project': 'Adicionar Projeto',
         'add_achievement': 'Adicionar Conquista',
         'add_category': 'Adicionar Categoria',
+        'new_project': 'Novo Projeto',
+        'new_achievement': 'Nova Conquista',
+        'categories': 'Categorias',
+        'dashboard': 'Painel',
+        'statistics': 'Estatísticas',
+        'total_projects': 'Total de Projetos',
+        'total_achievements': 'Total de Conquistas',
+        'published_projects': 'Projetos Publicados',
+        'recent_comments': 'Comentários Recentes',
         
         # Messages
         'login_success': 'Login realizado com sucesso!',

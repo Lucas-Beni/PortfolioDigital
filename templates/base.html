@@ -69,11 +69,11 @@
                                     <i class="fas fa-cog me-1"></i>{{ t('nav_admin') }}
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('admin_projects') }}">Manage Projects</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('admin_achievements') }}">Manage Achievements</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('admin_categories') }}">Categories</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('admin_about_edit') }}">Edit About</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('admin_dashboard') }}">{{ t('admin_dashboard') }}</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('admin_projects') }}">{{ t('manage_projects') }}</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('admin_achievements') }}">{{ t('manage_achievements') }}</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('admin_categories') }}">{{ t('categories') }}</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('admin_about_edit') }}">{{ t('edit_about') }}</a></li>
                                 </ul>
                             </li>
                         {% endif %}

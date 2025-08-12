@@ -1,0 +1,121 @@
+-- Portfolio Database Backup
+-- Generated on: $(date)
+-- PostgreSQL Database Schema and Data
+
+-- Create database tables
+CREATE TABLE IF NOT EXISTS users (
+    id VARCHAR PRIMARY KEY,
+    email VARCHAR UNIQUE,
+    password_hash VARCHAR,
+    first_name VARCHAR,
+    last_name VARCHAR,
+    profile_image_url VARCHAR,
+    is_admin BOOLEAN DEFAULT FALSE,
+    auth_type VARCHAR DEFAULT 'email',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS categories (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR NOT NULL UNIQUE,
+    description TEXT,
+    color VARCHAR DEFAULT '#007bff',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS projects (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR NOT NULL,
+    description TEXT,
+    content TEXT,
+    image_url VARCHAR,
+    demo_url VARCHAR,
+    github_url VARCHAR,
+    technologies VARCHAR,
+    category_id INTEGER REFERENCES categories(id),
+    is_published BOOLEAN DEFAULT FALSE,
+    is_featured BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS achievements (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR NOT NULL,
+    description TEXT,
+    date_achieved DATE,
+    organization VARCHAR,
+    certificate_url VARCHAR,
+    image_url VARCHAR,
+    is_featured BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS comments (
+    id SERIAL PRIMARY KEY,
+    content TEXT NOT NULL,
+    user_id VARCHAR REFERENCES users(id),
+    project_id INTEGER REFERENCES projects(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS likes (
+    id SERIAL PRIMARY KEY,
+    user_id VARCHAR REFERENCES users(id),
+    project_id INTEGER REFERENCES projects(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(user_id, project_id)
+);
+
+CREATE TABLE IF NOT EXISTS about_me (
+    id SERIAL PRIMARY KEY,
+    content TEXT,
+    linkedin_url VARCHAR,
+    github_url VARCHAR,
+    resume_url VARCHAR,
+    website_url VARCHAR,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Insert default admin user
+INSERT INTO users (id, email, password_hash, first_name, last_name, is_admin, auth_type, created_at, updated_at) 
+VALUES (
+    'fd682a58-bcf3-4e43-aa3a-d4db1ebb2b8f',
+    'lucgarcbeni@gmail.com',
+    'scrypt:32768:8:1$BIcmlCW6r8Bip3JZ$dc5d4bfa0b48bb791e5ba68349d88241fbe663c06ef58a1fa8a44a5902399a17255dd8dbf2288d7650cbc659e9812db1bb3a9a5a641ad0c2ddf328b95319d895',
+    'Lucas',
+    'Garcia',
+    true,
+    'email',
+    NOW(),
+    NOW()
+) ON CONFLICT (email) DO NOTHING;
+
+-- Insert default categories
+INSERT INTO categories (name, description, color) VALUES
+    ('Web Development', 'Projetos de desenvolvimento web', '#007bff'),
+    ('Mobile Apps', 'Aplicações móveis', '#28a745'),
+    ('Data Science', 'Análise de dados e machine learning', '#ffc107'),
+    ('APIs', 'Desenvolvimento de APIs', '#17a2b8'),
+    ('Tools', 'Ferramentas e utilitários', '#6f42c1')
+ON CONFLICT (name) DO NOTHING;
+
+-- Insert sample about me content
+INSERT INTO about_me (content, created_at, updated_at) VALUES
+    ('Desenvolvedor Full Stack apaixonado por criar soluções inovadoras e elegantes. Com experiência em diversas tecnologias, sempre busco aprender e aplicar as melhores práticas no desenvolvimento de software.', NOW(), NOW())
+ON CONFLICT DO NOTHING;
+
+-- Create indexes for performance
+CREATE INDEX IF NOT EXISTS idx_projects_published ON projects(is_published);
+CREATE INDEX IF NOT EXISTS idx_projects_featured ON projects(is_featured);
+CREATE INDEX IF NOT EXISTS idx_projects_category ON projects(category_id);
+CREATE INDEX IF NOT EXISTS idx_comments_project ON comments(project_id);
+CREATE INDEX IF NOT EXISTS idx_likes_project ON likes(project_id);
+CREATE INDEX IF NOT EXISTS idx_likes_user ON likes(user_id);
+
+-- Grant permissions (adjust as needed for your environment)
+-- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO your_app_user;
+-- GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO your_app_user;
