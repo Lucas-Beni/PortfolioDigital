@@ -5,7 +5,8 @@ from datetime import datetime
 import urllib.parse
 
 from app import app, db
-from replit_auth import require_login, require_admin, make_replit_blueprint
+from replit_auth import make_replit_blueprint
+from auth_decorators import login_required, admin_required
 from models import User, Project, Achievement, Category, Comment, Like, AboutMe
 from forms import ProjectForm, AchievementForm, CategoryForm, CommentForm, AboutMeForm, LoginForm, RegisterForm, ShareForm
 from utils import save_uploaded_file, delete_file
@@ -156,7 +157,7 @@ def about():
 
 # Interactive Routes (require login)
 @app.route('/project/<int:id>/comment', methods=['POST'])
-@require_login
+@login_required
 def add_comment(id):
     """Add comment to project"""
     project = Project.query.get_or_404(id)
@@ -176,7 +177,7 @@ def add_comment(id):
     return redirect(url_for('project_detail', id=id))
 
 @app.route('/project/<int:id>/like', methods=['POST'])
-@require_login
+@login_required
 def toggle_like(id):
     """Toggle like for project"""
     project = Project.query.get_or_404(id)
@@ -202,7 +203,7 @@ def toggle_like(id):
 
 # LinkedIn Sharing Route
 @app.route('/project/<int:id>/share', methods=['GET', 'POST'])
-@require_login
+@login_required
 def share_project(id):
     """Share project on LinkedIn with personalized message"""
     project = Project.query.get_or_404(id)
@@ -245,7 +246,7 @@ def share_project(id):
 
 # Admin Routes
 @app.route('/admin')
-@require_admin
+@admin_required
 def admin_dashboard():
     """Admin dashboard"""
     stats = {
@@ -262,14 +263,14 @@ def admin_dashboard():
     return render_template('admin/dashboard.html', stats=stats, recent_comments=recent_comments)
 
 @app.route('/admin/projects')
-@require_admin
+@admin_required
 def admin_projects():
     """Admin projects list"""
     projects = Project.query.order_by(desc(Project.created_at)).all()
     return render_template('admin/projects.html', projects=projects)
 
 @app.route('/admin/projects/new', methods=['GET', 'POST'])
-@require_admin
+@admin_required
 def admin_project_new():
     """Create new project"""
     form = ProjectForm()
@@ -300,7 +301,7 @@ def admin_project_new():
     return render_template('admin/project_form.html', form=form, title='New Project')
 
 @app.route('/admin/projects/<int:id>/edit', methods=['GET', 'POST'])
-@require_admin
+@admin_required
 def admin_project_edit(id):
     """Edit project"""
     project = Project.query.get_or_404(id)
@@ -328,7 +329,7 @@ def admin_project_edit(id):
     return render_template('admin/project_form.html', form=form, project=project, title='Edit Project')
 
 @app.route('/admin/projects/<int:id>/delete', methods=['POST'])
-@require_admin
+@admin_required
 def admin_project_delete(id):
     """Delete project"""
     project = Project.query.get_or_404(id)
@@ -343,28 +344,27 @@ def admin_project_delete(id):
     return redirect(url_for('admin_projects'))
 
 @app.route('/admin/achievements')
-@require_admin
+@admin_required
 def admin_achievements():
     """Admin achievements list"""
     achievements = Achievement.query.order_by(desc(Achievement.date_achieved)).all()
     return render_template('admin/achievements.html', achievements=achievements)
 
 @app.route('/admin/achievements/new', methods=['GET', 'POST'])
-@require_admin
+@admin_required
 def admin_achievement_new():
     """Create new achievement"""
     form = AchievementForm()
     
     if form.validate_on_submit():
-        achievement = Achievement(
-            title=form.title.data,
-            description=form.description.data,
-            date_achieved=form.date_achieved.data,
-            certificate_url=form.certificate_url.data,
-            organization=form.organization.data,
-            category_id=form.category_id.data if form.category_id.data != 0 else None,
-            is_published=form.is_published.data
-        )
+        achievement = Achievement()
+        achievement.title = form.title.data
+        achievement.description = form.description.data
+        achievement.date_achieved = form.date_achieved.data
+        achievement.certificate_url = form.certificate_url.data
+        achievement.organization = form.organization.data
+        achievement.category_id = form.category_id.data if form.category_id.data != 0 else None
+        achievement.is_published = form.is_published.data
         
         # Handle file upload
         if form.image.data:
@@ -380,7 +380,7 @@ def admin_achievement_new():
     return render_template('admin/achievement_form.html', form=form, title='New Achievement')
 
 @app.route('/admin/achievements/<int:id>/edit', methods=['GET', 'POST'])
-@require_admin
+@admin_required
 def admin_achievement_edit(id):
     """Edit achievement"""
     achievement = Achievement.query.get_or_404(id)
@@ -408,7 +408,7 @@ def admin_achievement_edit(id):
     return render_template('admin/achievement_form.html', form=form, achievement=achievement, title='Edit Achievement')
 
 @app.route('/admin/achievements/<int:id>/delete', methods=['POST'])
-@require_admin
+@admin_required
 def admin_achievement_delete(id):
     """Delete achievement"""
     achievement = Achievement.query.get_or_404(id)
@@ -423,7 +423,7 @@ def admin_achievement_delete(id):
     return redirect(url_for('admin_achievements'))
 
 @app.route('/admin/categories')
-@require_admin
+@admin_required
 def admin_categories():
     """Admin categories list"""
     categories = Category.query.all()
@@ -431,16 +431,15 @@ def admin_categories():
     return render_template('admin/categories.html', categories=categories, form=form)
 
 @app.route('/admin/categories/new', methods=['POST'])
-@require_admin
+@admin_required
 def admin_category_new():
     """Create new category"""
     form = CategoryForm()
     
     if form.validate_on_submit():
-        category = Category(
-            name=form.name.data,
-            color=form.color.data
-        )
+        category = Category()
+        category.name = form.name.data
+        category.color = form.color.data
         db.session.add(category)
         db.session.commit()
         flash('Category created successfully!', 'success')
@@ -450,7 +449,7 @@ def admin_category_new():
     return redirect(url_for('admin_categories'))
 
 @app.route('/admin/categories/<int:id>/delete', methods=['POST'])
-@require_admin
+@admin_required
 def admin_category_delete(id):
     """Delete category"""
     category = Category.query.get_or_404(id)
@@ -466,12 +465,13 @@ def admin_category_delete(id):
     return redirect(url_for('admin_categories'))
 
 @app.route('/admin/about', methods=['GET', 'POST'])
-@require_admin
+@admin_required
 def admin_about_edit():
     """Edit about me section"""
     about_me = AboutMe.query.first()
     if not about_me:
-        about_me = AboutMe(content="")
+        about_me = AboutMe()
+        about_me.content = ""
     
     form = AboutMeForm(obj=about_me)
     

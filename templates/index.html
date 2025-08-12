@@ -4,40 +4,37 @@
 
 {% block content %}
 <!-- Hero Section -->
-<section class="bg-primary text-white py-5">
+<section class="hero-section text-center">
     <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-8">
-                <h1 class="display-4 fw-bold mb-3">Welcome to My Portfolio</h1>
-                <p class="lead mb-4">
-                    {% if about_me and about_me.content %}
-                        {{ about_me.content[:200] }}{% if about_me.content|length > 200 %}...{% endif %}
-                    {% else %}
-                        Passionate developer creating innovative solutions and sharing my journey through code.
-                    {% endif %}
-                </p>
-                <div class="d-flex gap-3">
-                    <a href="{{ url_for('projects') }}" class="btn btn-light btn-lg">
-                        <i class="fas fa-folder me-2"></i>View Projects
-                    </a>
-                    <a href="{{ url_for('about') }}" class="btn btn-outline-light btn-lg">
-                        <i class="fas fa-user me-2"></i>About Me
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-4 text-center">
-                {% if about_me and about_me.profile_image %}
-                    <img src="{{ url_for('static', filename='uploads/' + about_me.profile_image) }}" 
-                         class="img-fluid rounded-circle shadow" 
-                         style="max-width: 250px; width: 100%; object-fit: cover; aspect-ratio: 1/1;">
-                {% else %}
-                    <div class="bg-secondary rounded-circle mx-auto d-flex align-items-center justify-content-center" 
-                         style="width: 250px; height: 250px;">
-                        <i class="fas fa-user fa-5x text-light"></i>
-                    </div>
-                {% endif %}
-            </div>
+        <h1 class="display-4 fw-bold mb-4 tech-header glow-text">
+            &gt; SYSTEM_PORTFOLIO.EXE
+        </h1>
+        <div class="mb-4">
+            <span class="loading">&gt;</span>
+            <span style="color: var(--cyber-blue);">Initializing digital showcase...</span>
+            <span class="loading">_</span>
         </div>
+        <p class="lead mb-4">
+            <span style="color: var(--primary-green);">[STATUS]</span> Projects loaded successfully <br>
+            <span style="color: var(--cyber-blue);">[MODE]</span> Interactive portfolio system online
+        </p>
+        {% if about_me and about_me.content %}
+            <div class="mb-4 p-3 border rounded" style="background: rgba(0,255,65,0.1); border-color: var(--primary-green);">
+                <span class="text-warning"># About Developer</span><br>
+                {{ about_me.content[:200] }}{% if about_me.content|length > 200 %}...<span class="loading">_</span>{% endif %}
+            </div>
+        {% else %}
+            <div class="mb-4 p-3 border rounded" style="background: rgba(0,255,65,0.1); border-color: var(--primary-green);">
+                <span class="text-warning"># About Developer</span><br>
+                Passionate developer creating innovative solutions<span class="loading">_</span>
+            </div>
+        {% endif %}
+        <a href="{{ url_for('projects') }}" class="btn btn-primary btn-lg me-3">
+            <i class="fas fa-terminal me-2"></i>./explore_projects.sh
+        </a>
+        <a href="{{ url_for('about') }}" class="btn btn-outline-primary btn-lg">
+            <i class="fas fa-user me-2"></i>cat README.md
+        </a>
     </div>
 </section>
 
