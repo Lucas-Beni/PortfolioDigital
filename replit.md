@@ -74,14 +74,15 @@ User requested: Translation system for PT/EN and LinkedIn sharing functionality.
 - **Font Awesome**: Icon library for UI elements
 
 ### Database
-- **PostgreSQL**: Primary database (configured via DATABASE_URL environment variable)
-- **Connection Pooling**: SQLAlchemy engine with pool recycling and pre-ping
+- **SQLite3**: Local database file (portfolio.db) - fully integrated, no environment variables needed
+- **Local Storage**: All data stored locally in SQLite database file
 
 ### Authentication Services
-- **Replit OAuth**: Third-party authentication provider
-- **JWT**: Token handling for authentication
+- **Local Authentication**: Username/password authentication system
+- **Replit OAuth**: Third-party authentication provider (maintained for compatibility)
+- **Default Admin**: Built-in admin user (adm@adm.com / adm123) created automatically
 
 ### Environment Configuration
-- **SESSION_SECRET**: Session encryption key
-- **DATABASE_URL**: PostgreSQL connection string
+- **Integrated Setup**: No environment variables required - all configuration hardcoded
+- **Session Key**: Hardcoded secure session key for local development
 - **Upload directory**: Static file storage for images

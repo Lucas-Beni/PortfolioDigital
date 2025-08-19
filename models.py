@@ -47,7 +47,7 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
     
     @staticmethod
-    def create_local_user(email, password, first_name=None, last_name=None):
+    def create_local_user(email, password, first_name=None, last_name=None, is_admin=False):
         import uuid
         user = User()
         user.id = str(uuid.uuid4())
@@ -55,6 +55,7 @@ class User(UserMixin, db.Model):
         user.first_name = first_name
         user.last_name = last_name
         user.auth_type = 'local'
+        user.is_admin = is_admin
         user.set_password(password)
         return user
 
