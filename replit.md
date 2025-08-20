@@ -9,6 +9,7 @@ This is a Flask-based portfolio web application designed to showcase projects, a
 Preferred communication style: Simple, everyday language.
 Language Features: Portuguese/English translation system implemented.
 User requested: Translation system for PT/EN and LinkedIn sharing functionality.
+Design preference: Terminal/cyberpunk theme matching provided image - dark background, bright green text, monospace fonts, terminal-style interface elements.
 
 ## System Architecture
 

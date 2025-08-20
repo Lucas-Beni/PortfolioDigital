@@ -1,56 +1,356 @@
-/* Custom styles for the portfolio */
+/* Terminal/Cyberpunk Portfolio Theme */
+:root {
+    --terminal-bg: #0a0a0a;
+    --terminal-dark: #1a1a1a;
+    --terminal-green: #00ff41;
+    --terminal-light-green: #39ff14;
+    --terminal-bright-green: #00ff00;
+    --terminal-gray: #333333;
+    --terminal-border: #555555;
+    --cursor-blink: #00ff41;
+    --glow-effect: 0 0 10px rgba(0, 255, 65, 0.8);
+    --text-shadow: 0 0 8px rgba(0, 255, 65, 0.6);
+}
 
-/* Navbar styling */
+/* Global Terminal Styling */
+* {
+    font-family: 'Courier New', 'Consolas', 'Monaco', monospace !important;
+}
+
+body {
+    background-color: var(--terminal-bg);
+    color: var(--terminal-green);
+    line-height: 1.6;
+}
+
+/* Navbar - Terminal Header */
 .navbar {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+    background: linear-gradient(180deg, var(--terminal-dark) 0%, var(--terminal-bg) 100%);
+    border-bottom: 2px solid var(--terminal-green);
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+    padding: 1rem 0;
 }
 
-.glow-text {
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+.navbar-brand {
+    color: var(--terminal-bright-green) !important;
+    font-weight: bold;
+    text-shadow: var(--text-shadow);
+    font-size: 1.5rem;
 }
 
-/* Card hover effects */
+.navbar-brand::before {
+    content: "> ";
+    color: var(--terminal-green);
+    animation: cursor-blink 1s infinite;
+}
+
+.navbar-nav .nav-link {
+    color: var(--terminal-green) !important;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--terminal-bright-green) !important;
+    text-shadow: var(--glow-effect);
+}
+
+.navbar-nav .nav-link::before {
+    content: "[";
+    margin-right: 4px;
+}
+
+.navbar-nav .nav-link::after {
+    content: "]";
+    margin-left: 4px;
+}
+
+/* Hero Section - Terminal Window */
+.hero-section {
+    background: linear-gradient(135deg, var(--terminal-bg) 0%, var(--terminal-dark) 100%);
+    border: 2px solid var(--terminal-green);
+    margin: 2rem auto;
+    padding: 3rem 2rem;
+    position: relative;
+    box-shadow: var(--glow-effect);
+}
+
+.hero-section::before {
+    content: "SYSTEM_PORTFOLIO.EXE";
+    position: absolute;
+    top: -1px;
+    left: 20px;
+    background: var(--terminal-bg);
+    color: var(--terminal-bright-green);
+    padding: 5px 15px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-shadow: var(--text-shadow);
+}
+
+.hero-section h1 {
+    color: var(--terminal-bright-green);
+    text-shadow: var(--text-shadow);
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.hero-section h1::before {
+    content: "> ";
+    color: var(--terminal-green);
+}
+
+.hero-section p {
+    color: var(--terminal-green);
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.hero-section .lead {
+    color: #cccccc;
+    font-style: italic;
+}
+
+/* Cards - Terminal Windows */
+.card {
+    background: var(--terminal-bg);
+    border: 2px solid var(--terminal-border);
+    border-radius: 0;
+    box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    border-color: var(--terminal-green);
+    box-shadow: var(--glow-effect);
+    transform: translateY(-2px);
+}
+
+.card-header {
+    background: var(--terminal-dark);
+    border-bottom: 1px solid var(--terminal-green);
+    color: var(--terminal-bright-green);
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.card-title {
+    color: var(--terminal-bright-green);
+    text-shadow: var(--text-shadow);
+    font-weight: bold;
+}
+
+.card-text {
+    color: var(--terminal-green);
+}
+
+/* Project Cards */
 .project-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: none;
+    background: var(--terminal-bg);
+    border: 1px solid var(--terminal-gray);
+    border-radius: 0;
+    transition: all 0.3s ease;
+    position: relative;
 }
 
 .project-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    border-color: var(--terminal-green);
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+    transform: translateY(-3px);
 }
 
-/* Badge styling */
-.badge {
-    font-weight: 500;
+.project-card .card-img-top {
+    border-bottom: 1px solid var(--terminal-border);
 }
 
-/* Form styling */
-.form-control:focus {
-    border-color: #667eea;
-    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+.project-card .card-body {
+    background: var(--terminal-bg);
 }
 
-/* Button styling */
+/* Buttons - Terminal Style */
 .btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border: none;
+    background: var(--terminal-green);
+    border: 2px solid var(--terminal-green);
+    color: var(--terminal-bg);
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 0;
+    transition: all 0.3s ease;
 }
 
 .btn-primary:hover {
-    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+    background: transparent;
+    color: var(--terminal-green);
+    box-shadow: var(--glow-effect);
+    text-shadow: var(--text-shadow);
 }
 
-/* Footer styling */
-.footer {
-    background-color: #1a1a1a;
-    margin-top: auto;
+.btn-outline-primary {
+    border: 2px solid var(--terminal-green);
+    color: var(--terminal-green);
+    background: transparent;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 0;
 }
 
-/* Responsive adjustments */
+.btn-outline-primary:hover {
+    background: var(--terminal-green);
+    color: var(--terminal-bg);
+    box-shadow: var(--glow-effect);
+}
+
+.btn-secondary {
+    background: var(--terminal-gray);
+    border: 2px solid var(--terminal-gray);
+    color: var(--terminal-green);
+    font-weight: bold;
+    border-radius: 0;
+}
+
+.btn-secondary:hover {
+    background: transparent;
+    border-color: var(--terminal-green);
+    color: var(--terminal-green);
+    box-shadow: var(--glow-effect);
+}
+
+/* Form Elements */
+.form-control {
+    background: var(--terminal-bg);
+    border: 2px solid var(--terminal-gray);
+    color: var(--terminal-green);
+    border-radius: 0;
+    font-family: 'Courier New', monospace;
+}
+
+.form-control:focus {
+    background: var(--terminal-bg);
+    border-color: var(--terminal-green);
+    color: var(--terminal-green);
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+}
+
+.form-control::placeholder {
+    color: var(--terminal-gray);
+}
+
+.form-label {
+    color: var(--terminal-green);
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Badges - Terminal Tags */
+.badge {
+    background: var(--terminal-green) !important;
+    color: var(--terminal-bg) !important;
+    font-weight: bold;
+    border-radius: 0;
+    padding: 0.4em 0.8em;
+    text-transform: uppercase;
+    font-size: 0.75em;
+}
+
+.badge.bg-warning {
+    background: #ffff00 !important;
+    color: var(--terminal-bg) !important;
+}
+
+.badge.bg-secondary {
+    background: var(--terminal-gray) !important;
+    color: var(--terminal-green) !important;
+}
+
+/* Links */
+a {
+    color: var(--terminal-green);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    color: var(--terminal-bright-green);
+    text-shadow: var(--text-shadow);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--terminal-bright-green);
+    text-shadow: var(--text-shadow);
+    font-weight: bold;
+}
+
+/* Terminal Cursor Animation */
+@keyframes cursor-blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+.cursor::after {
+    content: "_";
+    animation: cursor-blink 1s infinite;
+    color: var(--terminal-green);
+}
+
+/* Status Messages */
+.alert {
+    background: var(--terminal-bg);
+    border: 2px solid;
+    border-radius: 0;
+    font-family: monospace;
+    font-weight: bold;
+}
+
+.alert-success {
+    border-color: var(--terminal-green);
+    color: var(--terminal-green);
+}
+
+.alert-danger {
+    border-color: #ff0040;
+    color: #ff0040;
+}
+
+.alert-info {
+    border-color: #00ccff;
+    color: #00ccff;
+}
+
+/* Footer */
+footer {
+    background: var(--terminal-dark);
+    border-top: 2px solid var(--terminal-green);
+    color: var(--terminal-green);
+    padding: 2rem 0;
+}
+
+/* Text Colors */
+.text-muted {
+    color: var(--terminal-gray) !important;
+}
+
+/* Loading Effect */
+.loading::after {
+    content: "...";
+    animation: loading-dots 1.5s infinite;
+}
+
+@keyframes loading-dots {
+    0%, 20% { content: "."; }
+    40% { content: ".."; }
+    60%, 100% { content: "..."; }
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-    .project-card {
-        margin-bottom: 1rem;
+    .hero-section h1 {
+        font-size: 1.8rem;
+    }
+    
+    .navbar-brand {
+        font-size: 1.2rem;
     }
 }
