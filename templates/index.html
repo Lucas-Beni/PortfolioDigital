@@ -3,88 +3,56 @@
 {% block title %}Portfolio - Home{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
-<section class="hero-section text-center">
+<!-- Hero Section - Exact Match to Image -->
+<section class="hero-section">
     <div class="container">
-        <h1 class="display-4 fw-bold mb-4 tech-header glow-text">
-            &gt; SYSTEM_PORTFOLIO.EXE
-        </h1>
-        <div class="mb-4">
-            <span class="loading">&gt;</span>
-            <span style="color: var(--cyber-blue);">Initializing digital showcase...</span>
-            <span class="loading">_</span>
+        <h1>SYSTEM_PORTFOLIO.EXE</h1>
+        
+        <div class="initializing-text">
+            - Initializing digital showcase...
         </div>
-        <p class="lead mb-4">
-            <span style="color: var(--primary-green);">[STATUS]</span> Projects loaded successfully <br>
-            <span style="color: var(--cyber-blue);">[MODE]</span> Interactive portfolio system online
-        </p>
-        {% if about_me and about_me.content %}
-            <div class="mb-4 p-3 border rounded" style="background: rgba(0,255,65,0.1); border-color: var(--primary-green);">
-                <span class="text-warning"># About Developer</span><br>
-                {{ about_me.content[:200] }}{% if about_me.content|length > 200 %}...<span class="loading">_</span>{% endif %}
-            </div>
-        {% else %}
-            <div class="mb-4 p-3 border rounded" style="background: rgba(0,255,65,0.1); border-color: var(--primary-green);">
-                <span class="text-warning"># About Developer</span><br>
-                Passionate developer creating innovative solutions<span class="loading">_</span>
-            </div>
-        {% endif %}
-        <a href="{{ url_for('projects') }}" class="btn btn-primary btn-lg me-3">
-            <i class="fas fa-terminal me-2"></i>./explore_projects.sh
-        </a>
-        <a href="{{ url_for('about') }}" class="btn btn-outline-primary btn-lg">
-            <i class="fas fa-user me-2"></i>cat README.md
-        </a>
+        
+        <div class="status-container">
+            <div class="status-line">[STATUS] Projects loaded successfully</div>
+            <div class="status-line">[MODE] Interactive portfolio system online</div>
+        </div>
+        
+        <div class="about-box">
+            <div style="color: var(--matrix-green); margin-bottom: 1rem;"># About Developer</div>
+            <div style="color: var(--matrix-green);">Passionate developer creating innovative solutions</div>
+        </div>
+        
+        <div class="mt-4">
+            <a href="{{ url_for('projects') }}" class="explore-btn">
+                > ./explore_projects.sh
+            </a>
+            <a href="{{ url_for('about') }}" class="readme-btn">
+                <i class="fas fa-user me-1"></i> cat README.md
+            </a>
+        </div>
     </div>
 </section>
 
-<!-- Featured Projects -->
+<!-- Recent Projects Section - Exact Match to Image -->
 {% if featured_projects %}
-<section class="py-5">
+<section class="projects-section">
     <div class="container">
-        <div class="row mb-4">
-            <div class="col">
-                <h2 class="h3 fw-bold">{{ t('featured_projects') }}</h2>
-                <p class="text-muted">{{ t('hero_subtitle') }}</p>
-            </div>
-        </div>
+        <h2>Recent Projects</h2>
+        <p class="subtitle">Showcasing my projects, achievements, and professional journey</p>
         
-        <div class="row g-4">
+        <div class="row g-3">
             {% for project in featured_projects %}
-            <div class="col-lg-4 col-md-6">
-                <div class="card h-100 shadow-sm">
-                    {% if project.image_url %}
-                        <img src="{{ url_for('static', filename='uploads/' + project.image_url) }}" 
-                             class="card-img-top" style="height: 200px; object-fit: cover;">
-                    {% else %}
-                        <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" 
-                             style="height: 200px;">
-                            <i class="fas fa-project-diagram fa-3x text-light"></i>
-                        </div>
-                    {% endif %}
-                    
-                    <div class="card-body d-flex flex-column">
+            <div class="col-md-6">
+                <div class="project-card">
+                    <div class="card-body">
                         <h5 class="card-title">{{ project.title }}</h5>
-                        <p class="card-text flex-grow-1">{{ project.description[:150] }}{% if project.description|length > 150 %}...{% endif %}</p>
-                        
-                        {% if project.tech_list %}
-                            <div class="mb-3">
-                                {% for tech in project.tech_list[:3] %}
-                                    <span class="badge bg-secondary me-1">{{ tech }}</span>
-                                {% endfor %}
-                                {% if project.tech_list|length > 3 %}
-                                    <span class="badge bg-info">+{{ project.tech_list|length - 3 }}</span>
-                                {% endif %}
+                        <p class="card-text">{{ project.description[:100] }}{% if project.description|length > 100 %}...{% endif %}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div style="color: #888; font-size: 0.8rem;">
+                                <i class="fas fa-heart me-1"></i>{{ project.like_count or 0 }}
                             </div>
-                        {% endif %}
-                        
-                        <div class="d-flex justify-content-between align-items-center mt-auto">
-                            <div class="text-muted small">
-                                <i class="fas fa-heart me-1"></i>{{ project.like_count }}
-                                <i class="fas fa-comment ms-2 me-1"></i>{{ project.comment_count }}
-                            </div>
-                            <a href="{{ url_for('project_detail', id=project.id) }}" class="btn btn-primary btn-sm">
-                                {{ t('view_project') }}
+                            <a href="{{ url_for('project_detail', id=project.id) }}" class="view-project-btn">
+                                View Project
                             </a>
                         </div>
                     </div>
@@ -96,80 +64,55 @@
 </section>
 {% endif %}
 
-<!-- Recent Projects -->
-<section class="py-5 bg-dark">
+<!-- Recent Achievements -->
+{% if recent_achievements %}
+<section class="py-5">
     <div class="container">
         <div class="row mb-4">
             <div class="col">
-                <h2 class="h3 fw-bold text-light">{{ t('recent_projects') }}</h2>
-                <p class="text-muted">{{ t('hero_subtitle') }}</p>
+                <h2 class="h3 fw-bold text-light">{{ t('recent_achievements') }}</h2>
+                <p class="text-muted">{{ t('achievements_subtitle') }}</p>
             </div>
         </div>
         
-        {% if recent_projects %}
-            <div class="row g-4">
-                {% for project in recent_projects %}
-                <div class="col-lg-4 col-md-6">
-                    <div class="card h-100 bg-secondary">
-                        {% if project.image_url %}
-                            <img src="{{ url_for('static', filename='uploads/' + project.image_url) }}" 
-                                 class="card-img-top" style="height: 180px; object-fit: cover;">
-                        {% endif %}
+        <div class="row g-4">
+            {% for achievement in recent_achievements %}
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 bg-secondary achievement-card">
+                    {% if achievement.image_url %}
+                        <img src="{{ url_for('static', filename='uploads/' + achievement.image_url) }}" 
+                             class="card-img-top" style="height: 180px; object-fit: cover;">
+                    {% endif %}
+                    
+                    <div class="card-body d-flex flex-column">
+                        <h6 class="card-title text-warning">{{ achievement.title }}</h6>
+                        <p class="card-text small flex-grow-1 text-light">{{ achievement.description[:100] }}{% if achievement.description|length > 100 %}...{% endif %}</p>
                         
-                        <div class="card-body d-flex flex-column">
-                            <h6 class="card-title">{{ project.title }}</h6>
-                            <p class="card-text small flex-grow-1">{{ project.description[:100] }}{% if project.description|length > 100 %}...{% endif %}</p>
-                            
-                            <div class="d-flex justify-content-between align-items-center mt-auto">
-                                <small class="text-muted">
-                                    <i class="fas fa-heart me-1"></i>{{ project.like_count }}
-                                </small>
-                                <a href="{{ url_for('project_detail', id=project.id) }}" class="btn btn-primary btn-sm">
-                                    {{ t('view_project') }}
-                                </a>
-                            </div>
+                        <div class="mt-auto">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar me-1"></i>{{ achievement.date_earned.strftime('%Y-%m-%d') if achievement.date_earned else 'N/A' }}
+                            </small>
                         </div>
                     </div>
                 </div>
-                {% endfor %}
             </div>
-            
-            <div class="text-center mt-4">
-                <a href="{{ url_for('projects') }}" class="btn btn-outline-light">
-                    {{ t('view_all_projects') }} <i class="fas fa-arrow-right ms-2"></i>
-                </a>
-            </div>
-        {% else %}
-            <div class="text-center py-5">
-                <div class="text-muted">
-                    <i class="fas fa-folder-open fa-3x mb-3 d-block"></i>
-                    <h5>{{ t('no_projects') }}</h5>
-                    <p>{{ t('no_projects') }}</p>
-                </div>
-            </div>
-        {% endif %}
+            {% endfor %}
+        </div>
     </div>
 </section>
+{% endif %}
 
 <!-- Call to Action -->
-<section class="py-5">
+<section class="py-5 text-center">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8 mx-auto text-center">
-                <h2 class="h3 fw-bold mb-3">Let's Work Together</h2>
-                <p class="lead text-muted mb-4">
-                    Interested in collaborating or have a project in mind? Let's connect and create something amazing together.
-                </p>
-                {% if not current_user.is_authenticated %}
-                    <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg me-3">
-                        <i class="fas fa-sign-in-alt me-2"></i>Join the Community
-                    </a>
-                {% endif %}
-                <a href="{{ url_for('about') }}" class="btn btn-outline-primary btn-lg">
-                    <i class="fas fa-envelope me-2"></i>Get in Touch
-                </a>
-            </div>
-        </div>
+        <h2 class="h3 fw-bold mb-4 text-light">{{ t('cta_title') }}</h2>
+        <p class="lead mb-4 text-muted">{{ t('cta_subtitle') }}</p>
+        <a href="{{ url_for('about') }}" class="btn btn-primary btn-lg me-3">
+            {{ t('learn_more') }}
+        </a>
+        <a href="{{ url_for('projects') }}" class="btn btn-outline-primary btn-lg">
+            {{ t('view_all_projects') }}
+        </a>
     </div>
 </section>
 {% endblock %}
