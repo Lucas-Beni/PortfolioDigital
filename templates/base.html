@@ -24,7 +24,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container">
             <a class="navbar-brand fw-bold glow-text" href="{{ url_for('index') }}">
-                <i class="fas fa-terminal me-2"></i>&gt; PORTFOLIO_
+                <i class="fas fa-code me-2"></i>&gt; PORTFOLIO_ 💻
             </a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -34,16 +34,24 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('index') }}">{{ t('nav_home') }}</a>
+                        <a class="nav-link" href="{{ url_for('index') }}">
+                            <i class="fas fa-home me-1"></i>{{ t('nav_home') }} 🏠
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('projects') }}">{{ t('nav_projects') }}</a>
+                        <a class="nav-link" href="{{ url_for('projects') }}">
+                            <i class="fas fa-folder-open me-1"></i>{{ t('nav_projects') }} 📁
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('achievements') }}">{{ t('nav_achievements') }}</a>
+                        <a class="nav-link" href="{{ url_for('achievements') }}">
+                            <i class="fas fa-trophy me-1"></i>{{ t('nav_achievements') }} 🏆
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('about') }}">{{ t('nav_about') }}</a>
+                        <a class="nav-link" href="{{ url_for('about') }}">
+                            <i class="fas fa-info-circle me-1"></i>{{ t('nav_about') }} ℹ️
+                        </a>
                     </li>
                 </ul>
                 
@@ -51,7 +59,7 @@
                     <!-- Language Selector -->
                     <li class="nav-item dropdown me-2">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-globe me-1"></i>{{ t('language') }}
+                            <i class="fas fa-globe me-1"></i>{{ t('language') }} 🌍
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item{% if current_language == 'en' %} active{% endif %}" 

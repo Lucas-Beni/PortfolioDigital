@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}About - Portfolio{% endblock %}
+{% block title %}ℹ️ About - Portfolio{% endblock %}
 
 {% block content %}
 <div class="container py-5">
@@ -15,7 +15,7 @@
                 {% else %}
                     <div class="bg-secondary rounded-circle mx-auto d-flex align-items-center justify-content-center mb-4" 
                          style="width: 300px; height: 300px;">
-                        <i class="fas fa-user fa-5x text-light"></i>
+                        <i class="fas fa-user fa-5x text-light"></i> 👤
                     </div>
                 {% endif %}
                 
@@ -23,22 +23,22 @@
                 <div class="d-flex justify-content-center gap-3 mb-4">
                     {% if about_me.linkedin_url %}
                         <a href="{{ about_me.linkedin_url }}" target="_blank" class="btn btn-outline-primary">
-                            <i class="fab fa-linkedin"></i>
+                            <i class="fab fa-linkedin me-1"></i> 💼
                         </a>
                     {% endif %}
                     {% if about_me.github_url %}
                         <a href="{{ about_me.github_url }}" target="_blank" class="btn btn-outline-secondary">
-                            <i class="fab fa-github"></i>
+                            <i class="fab fa-github me-1"></i> 🐙
                         </a>
                     {% endif %}
                     {% if about_me.website_url %}
                         <a href="{{ about_me.website_url }}" target="_blank" class="btn btn-outline-info">
-                            <i class="fas fa-globe"></i>
+                            <i class="fas fa-globe me-1"></i> 🌍
                         </a>
                     {% endif %}
                     {% if about_me.resume_url %}
                         <a href="{{ about_me.resume_url }}" target="_blank" class="btn btn-outline-success">
-                            <i class="fas fa-file-pdf"></i> Resume
+                            <i class="fas fa-file-pdf me-1"></i> Resume 📄
                         </a>
                     {% endif %}
                 </div>

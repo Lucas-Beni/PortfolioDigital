@@ -266,12 +266,33 @@ body {
     padding-left: 1.5rem;
 }
 
-.status-line::before {
-    content: '●';
-    position: absolute;
-    left: 0;
+/* Enhanced status icons */
+.status-icon {
     color: var(--success-green);
-    animation: status-blink 2s infinite;
+    margin-right: 0.5rem;
+    animation: status-pulse 2s infinite;
+}
+
+.about-icon {
+    color: var(--matrix-accent);
+    margin-right: 0.8rem;
+    animation: rotate 3s linear infinite;
+}
+
+@keyframes status-pulse {
+    0%, 100% { 
+        opacity: 1; 
+        transform: scale(1);
+    }
+    50% { 
+        opacity: 0.7; 
+        transform: scale(1.1);
+    }
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 @keyframes status-blink {
@@ -709,6 +730,49 @@ footer {
     0%, 20% { content: "."; }
     40% { content: ".."; }
     60%, 100% { content: "..."; }
+}
+
+/* Icon animations for better accessibility and UX */
+.nav-link i, .btn i, .explore-btn i, .readme-btn i {
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover i {
+    transform: scale(1.2);
+}
+
+.explore-btn:hover i {
+    animation: terminal-blink 1s infinite;
+}
+
+.readme-btn:hover i {
+    transform: translateY(-2px);
+}
+
+@keyframes terminal-blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0.5; }
+}
+
+/* Enhanced accessibility with ARIA and visual cues */
+.project-stats i {
+    color: var(--matrix-accent);
+    margin-right: 0.3rem;
+}
+
+.view-project-btn i {
+    transition: transform 0.3s ease;
+}
+
+.view-project-btn:hover i {
+    transform: translateX(3px);
+}
+
+/* Emoji and icon enhancements for better visual hierarchy */
+.status-line, .project-stats, .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 /* Responsive */
