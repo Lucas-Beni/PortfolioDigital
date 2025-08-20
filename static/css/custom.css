@@ -1,355 +1,56 @@
-/* Technological Design - Matrix/Cyberpunk Inspired */
-:root {
-    --primary-green: #00ff41;
-    --dark-green: #008f26;
-    --matrix-black: #0d0d0d;
-    --cyber-blue: #00d4ff;
-    --neon-purple: #c850c0;
-    --grid-gray: #1a1a1a;
-    --text-green: #00cc33;
-    --glow-effect: 0 0 20px rgba(0, 255, 65, 0.5);
-}
-
-/* Matrix Grid Background */
-body {
-    background-color: var(--matrix-black);
-    background-image: 
-        linear-gradient(rgba(0, 255, 65, 0.1) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 255, 65, 0.1) 1px, transparent 1px);
-    background-size: 50px 50px;
-    color: var(--text-green);
-    font-family: 'Courier New', 'Consolas', monospace;
-}
-
-/* Glowing text effects */
-.glow-text {
-    text-shadow: var(--glow-effect);
-    animation: pulse-glow 2s infinite alternate;
-}
-
-@keyframes pulse-glow {
-    from { text-shadow: 0 0 10px rgba(0, 255, 65, 0.5); }
-    to { text-shadow: 0 0 30px rgba(0, 255, 65, 0.8); }
-}
+/* Custom styles for the portfolio */
 
 /* Navbar styling */
-.navbar-dark {
-    background: linear-gradient(135deg, var(--matrix-black) 0%, var(--grid-gray) 100%) !important;
-    border-bottom: 2px solid var(--primary-green);
-    box-shadow: 0 2px 20px rgba(0, 255, 65, 0.3);
+.navbar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
 }
 
-.navbar-brand {
-    color: var(--primary-green) !important;
-    font-weight: bold;
-    text-shadow: var(--glow-effect);
+.glow-text {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
-.navbar-nav .nav-link {
-    color: var(--text-green) !important;
-    position: relative;
-    transition: all 0.3s ease;
-}
-
-.navbar-nav .nav-link:hover {
-    color: var(--primary-green) !important;
-    text-shadow: 0 0 10px rgba(0, 255, 65, 0.8);
-}
-
-/* Cards with cyber design */
-.card {
-    background: rgba(13, 13, 13, 0.9);
-    border: 1px solid var(--primary-green);
-    border-radius: 10px;
-    box-shadow: 
-        0 0 20px rgba(0, 255, 65, 0.2),
-        inset 0 0 20px rgba(0, 255, 65, 0.1);
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 
-        0 10px 30px rgba(0, 255, 65, 0.4),
-        inset 0 0 30px rgba(0, 255, 65, 0.2);
-}
-
-.card-header {
-    background: linear-gradient(135deg, var(--grid-gray), var(--matrix-black));
-    border-bottom: 1px solid var(--primary-green);
-    color: var(--primary-green);
-}
-
-/* Buttons with neon effects */
-.btn-primary {
-    background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
-    border: none;
-    color: var(--matrix-black);
-    font-weight: bold;
-    box-shadow: 0 0 15px rgba(0, 255, 65, 0.4);
-    transition: all 0.3s ease;
-}
-
-.btn-primary:hover {
-    background: linear-gradient(135deg, var(--dark-green), var(--primary-green));
-    box-shadow: 0 0 25px rgba(0, 255, 65, 0.7);
-    transform: translateY(-2px);
-}
-
-.btn-outline-primary {
-    border: 2px solid var(--primary-green);
-    color: var(--primary-green);
-    background: transparent;
-}
-
-.btn-outline-primary:hover {
-    background: var(--primary-green);
-    color: var(--matrix-black);
-    box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
-}
-
-.btn-danger {
-    background: linear-gradient(135deg, #ff0040, #cc0033);
-    border: none;
-    box-shadow: 0 0 15px rgba(255, 0, 64, 0.4);
-}
-
-.btn-outline-danger {
-    border: 2px solid #ff0040;
-    color: #ff0040;
-    background: transparent;
-}
-
-.btn-outline-danger:hover {
-    background: #ff0040;
-    color: var(--matrix-black);
-    box-shadow: 0 0 15px rgba(255, 0, 64, 0.5);
-}
-
-/* Hero section with matrix effect */
-.hero-section {
-    background: linear-gradient(
-        135deg, 
-        var(--matrix-black) 0%, 
-        var(--grid-gray) 50%, 
-        var(--matrix-black) 100%
-    );
-    color: var(--primary-green);
-    padding: 120px 0;
-    position: relative;
-    overflow: hidden;
-}
-
-.hero-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="50" font-size="50" fill="rgba(0,255,65,0.1)">01</text></svg>');
-    opacity: 0.1;
-    animation: matrix-rain 10s linear infinite;
-}
-
-@keyframes matrix-rain {
-    0% { transform: translateY(-100%); }
-    100% { transform: translateY(100%); }
-}
-
-/* Project cards */
+/* Card hover effects */
 .project-card {
-    background: rgba(13, 13, 13, 0.95);
-    border: 1px solid var(--cyber-blue);
-    transition: all 0.3s ease;
-    position: relative;
-}
-
-.project-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(45deg, transparent 49%, var(--cyber-blue) 50%, transparent 51%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.project-card:hover::before {
-    opacity: 0.1;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
 }
 
 .project-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 
-        0 15px 35px rgba(0, 212, 255, 0.3),
-        0 0 30px rgba(0, 255, 65, 0.2);
-    border-color: var(--primary-green);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
 }
 
-/* Achievement cards */
-.achievement-card {
-    background: rgba(13, 13, 13, 0.95);
-    border: 1px solid var(--neon-purple);
-    transition: all 0.3s ease;
-}
-
-.achievement-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 
-        0 15px 35px rgba(200, 80, 192, 0.3),
-        0 0 30px rgba(0, 255, 65, 0.2);
-}
-
-/* Forms */
-.form-control {
-    background: rgba(13, 13, 13, 0.8);
-    border: 1px solid var(--primary-green);
-    color: var(--text-green);
-    font-family: 'Courier New', monospace;
-}
-
-.form-control:focus {
-    background: rgba(13, 13, 13, 0.9);
-    border-color: var(--cyber-blue);
-    box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
-    color: var(--primary-green);
-}
-
-.form-label {
-    color: var(--primary-green);
-    font-weight: bold;
-}
-
-/* Links */
-a {
-    color: var(--cyber-blue);
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-a:hover {
-    color: var(--primary-green);
-    text-shadow: 0 0 10px rgba(0, 255, 65, 0.8);
-}
-
-/* Badges */
+/* Badge styling */
 .badge {
-    background: linear-gradient(135deg, var(--cyber-blue), var(--neon-purple)) !important;
-    color: var(--matrix-black) !important;
-    font-family: 'Courier New', monospace;
-    font-weight: bold;
+    font-weight: 500;
 }
 
-.badge.bg-secondary {
-    background: linear-gradient(135deg, var(--grid-gray), var(--primary-green)) !important;
+/* Form styling */
+.form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
 }
 
-/* Footer */
-footer {
-    background: linear-gradient(135deg, var(--matrix-black), var(--grid-gray));
-    border-top: 2px solid var(--primary-green);
-    color: var(--text-green);
-}
-
-/* Scrollbar */
-::-webkit-scrollbar {
-    width: 12px;
-}
-
-::-webkit-scrollbar-track {
-    background: var(--matrix-black);
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--primary-green);
-    border-radius: 6px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: var(--cyber-blue);
-}
-
-/* Loading animation */
-.loading {
-    display: inline-block;
-    animation: matrix-loading 1.5s infinite;
-}
-
-@keyframes matrix-loading {
-    0%, 80%, 100% { opacity: 1; }
-    40% { opacity: 0.3; }
-}
-
-/* Tech headers */
-.tech-header {
-    color: var(--primary-green);
-    text-shadow: var(--glow-effect);
-    font-family: 'Courier New', monospace;
-    font-weight: bold;
-}
-
-/* Alert styling */
-.alert {
-    background: rgba(13, 13, 13, 0.9);
-    border: 1px solid var(--cyber-blue);
-    color: var(--text-green);
-}
-
-.alert-success {
-    border-color: var(--primary-green);
-    background: rgba(0, 255, 65, 0.1);
-}
-
-.alert-danger {
-    border-color: #ff0040;
-    background: rgba(255, 0, 64, 0.1);
-}
-
-.alert-info {
-    border-color: var(--cyber-blue);
-    background: rgba(0, 212, 255, 0.1);
-}
-
-/* Breadcrumb */
-.breadcrumb {
-    background: rgba(13, 13, 13, 0.8);
-    border: 1px solid var(--primary-green);
-}
-
-.breadcrumb-item a {
-    color: var(--cyber-blue);
-}
-
-.breadcrumb-item.active {
-    color: var(--primary-green);
-}
-
-/* Dropdown menu */
-.dropdown-menu {
-    background: rgba(13, 13, 13, 0.95);
-    border: 1px solid var(--primary-green);
-    box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
-}
-
-.dropdown-item {
-    color: var(--text-green);
-    transition: all 0.3s ease;
-}
-
-.dropdown-item:hover {
-    background: rgba(0, 255, 65, 0.2);
-    color: var(--primary-green);
-}
-
-/* Section divider */
-.section-divider {
-    height: 2px;
-    background: linear-gradient(to right, var(--cyber-blue), var(--primary-green), var(--neon-purple));
+/* Button styling */
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border: none;
-    margin: 50px 0;
-    box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+}
+
+/* Footer styling */
+.footer {
+    background-color: #1a1a1a;
+    margin-top: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .project-card {
+        margin-bottom: 1rem;
+    }
 }
