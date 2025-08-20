@@ -116,7 +116,7 @@
                 <div class="card-body">
                     <h3 class="card-title">Project Overview</h3>
                     <div class="content">
-                        {{ project.content|nl2br }}
+                        {{ project.content|replace('\n', '<br>')|safe }}
                     </div>
                 </div>
             </div>
