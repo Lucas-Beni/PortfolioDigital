@@ -5,7 +5,6 @@ from datetime import datetime
 import urllib.parse
 
 from app import app, db
-from replit_auth import make_replit_blueprint
 from auth_decorators import login_required, admin_required
 from models import User, Project, Achievement, Category, Comment, Like, AboutMe
 from forms import ProjectForm, AchievementForm, CategoryForm, CommentForm, AboutMeForm, LoginForm, RegisterForm, ShareForm
@@ -13,7 +12,6 @@ from utils import save_uploaded_file, delete_file
 from translations import get_translation
 
 # Register authentication blueprint
-app.register_blueprint(make_replit_blueprint(), url_prefix="/auth")
 
 # Make session permanent and set language
 @app.before_request

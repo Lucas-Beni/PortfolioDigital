@@ -32,6 +32,19 @@ db.init_app(app)
 # Create upload directory if it doesn't exist
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
+from flask_login import LoginManager
+
+login_manager = LoginManager()
+login_manager.login_view = "login"  # rota usada para login
+login_manager.init_app(app)
+
+# necessário para o Flask-Login saber como carregar o usuário
+from models import User
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
+
 with app.app_context():
     # Import models to ensure tables are created
     import models  # noqa: F401

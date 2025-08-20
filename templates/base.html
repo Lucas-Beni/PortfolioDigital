@@ -88,7 +88,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 {% if current_user.auth_type == 'replit' %}
-                                    <li><a class="dropdown-item" href="{{ url_for('replit_auth.logout') }}">{{ t('nav_logout') }}</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('logout') }}">{{ t('nav_logout') }}</a></li>
                                 {% else %}
                                     <li><a class="dropdown-item" href="{{ url_for('logout') }}">{{ t('nav_logout') }}</a></li>
                                 {% endif %}
@@ -107,7 +107,7 @@
                                     <i class="fas fa-user-plus me-2"></i>{{ t('nav_register') }}
                                 </a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{{ url_for('replit_auth.login') }}">
+                                <li><a class="dropdown-item" href="{{ url_for('login') }}">
                                     <i class="fas fa-code me-2"></i>{{ t('nav_replit_login') }}
                                 </a></li>
                             </ul>
