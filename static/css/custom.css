@@ -1,133 +1,318 @@
-/* Terminal/Matrix Green Portfolio Theme */
+/* Advanced Terminal/Matrix Green Theme - Enhanced UI/UX */
 :root {
-    --matrix-bg: #0d1017;
-    --matrix-dark: #1a1f2e;
+    --matrix-bg: #0a0f0a;
+    --matrix-dark: #0f1419;
+    --matrix-darker: #040806;
     --matrix-green: #00ff41;
     --matrix-bright-green: #39ff14;
     --matrix-light-green: #7fff00;
-    --matrix-gray: #404040;
+    --matrix-gray: #2a2a2a;
+    --matrix-light-gray: #404040;
     --matrix-border: #00ff41;
     --terminal-blue: #00d4ff;
-    --glow-green: 0 0 10px rgba(0, 255, 65, 0.8);
-    --text-glow: 0 0 8px rgba(0, 255, 65, 0.6);
+    --terminal-cyan: #00ffff;
+    --matrix-accent: #64ffda;
+    --warning-amber: #ffb400;
+    --danger-red: #ff4444;
+    --success-green: #00c851;
+    --glow-green: 0 0 15px rgba(0, 255, 65, 0.8);
+    --glow-strong: 0 0 25px rgba(0, 255, 65, 1);
+    --text-glow: 0 0 10px rgba(0, 255, 65, 0.6);
+    --shadow-deep: 0 8px 32px rgba(0, 255, 65, 0.15);
+    --gradient-green: linear-gradient(135deg, var(--matrix-green) 0%, var(--matrix-accent) 100%);
+    --gradient-dark: linear-gradient(135deg, var(--matrix-darker) 0%, var(--matrix-dark) 100%);
 }
 
-/* Global Terminal Styling - Exact Matrix Look */
+/* Enhanced Global Styling with Modern UX */
 * {
-    font-family: 'Courier New', 'Consolas', 'Monaco', monospace !important;
-    font-weight: normal;
+    font-family: 'Fira Code', 'JetBrains Mono', 'Courier New', 'Consolas', 'Monaco', monospace !important;
+    font-weight: 400;
+    box-sizing: border-box;
 }
 
 body {
-    background: linear-gradient(135deg, var(--matrix-bg) 0%, #0a0a0a 100%);
+    background: var(--matrix-bg);
+    background-image: 
+        radial-gradient(circle at 25% 25%, rgba(0, 255, 65, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(0, 255, 65, 0.03) 0%, transparent 50%),
+        linear-gradient(135deg, var(--matrix-bg) 0%, var(--matrix-darker) 100%);
     color: var(--matrix-green);
-    line-height: 1.4;
+    line-height: 1.6;
     margin: 0;
     padding: 0;
     overflow-x: hidden;
+    scroll-behavior: smooth;
 }
 
-/* Navbar - Exact Terminal Header from Image */
+/* Enhanced scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--matrix-darker);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gradient-green);
+    border-radius: 10px;
+    transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--matrix-bright-green);
+    box-shadow: var(--glow-green);
+}
+
+/* Enhanced Navbar with Modern UX */
 .navbar {
-    background: transparent;
-    border: none;
+    background: rgba(10, 15, 10, 0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--matrix-green);
+    box-shadow: 0 2px 20px rgba(0, 255, 65, 0.2);
     padding: 1rem 0;
-    position: relative;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.navbar.scrolled {
+    background: rgba(10, 15, 10, 0.98);
+    box-shadow: var(--shadow-deep);
 }
 
 .navbar-brand {
     color: var(--matrix-green) !important;
     font-weight: bold;
     text-shadow: var(--text-glow);
-    font-size: 1.2rem;
+    font-size: 1.3rem;
+    transition: all 0.3s ease;
 }
 
 .navbar-brand::before {
     content: "> ";
     color: var(--matrix-green);
-    animation: cursor-blink 1s infinite;
+    animation: cursor-blink 1.5s infinite;
+}
+
+.navbar-brand:hover {
+    color: var(--matrix-bright-green) !important;
+    text-shadow: var(--glow-strong);
+    transform: scale(1.05);
 }
 
 .navbar-nav .nav-link {
     color: var(--matrix-green) !important;
-    font-weight: normal;
+    font-weight: 500;
     transition: all 0.3s ease;
-    text-transform: none;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 0.5rem 1rem;
+    margin: 0 0.2rem;
+    border-radius: 4px;
+}
+
+.navbar-nav .nav-link::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--gradient-green);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
 }
 
 .navbar-nav .nav-link:hover {
     color: var(--matrix-bright-green) !important;
     text-shadow: var(--glow-green);
+    background: rgba(0, 255, 65, 0.05);
+    transform: translateY(-2px);
 }
 
-/* Language and User Info in Top Right - Like Image */
+.navbar-nav .nav-link:hover::before {
+    width: 100%;
+}
+
+.navbar-nav .nav-link.active {
+    color: var(--matrix-bright-green) !important;
+    background: rgba(0, 255, 65, 0.1);
+    text-shadow: var(--text-glow);
+}
+
+/* Language and User Info with Enhanced Styling */
 .navbar .navbar-text {
-    color: var(--matrix-green);
-    font-size: 0.8rem;
+    color: var(--matrix-accent);
+    font-size: 0.85rem;
+    background: rgba(0, 255, 65, 0.05);
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    border: 1px solid var(--matrix-green);
+    transition: all 0.3s ease;
 }
 
-/* Hero Section - Exact Match to Image */
+.navbar .navbar-text:hover {
+    background: rgba(0, 255, 65, 0.1);
+    box-shadow: var(--glow-green);
+}
+
+/* Enhanced Hero Section with Modern Effects */
 .hero-section {
-    background: var(--matrix-bg);
-    padding: 4rem 0 6rem 0;
+    background: var(--gradient-dark);
+    padding: 8rem 0 6rem 0;
     text-align: center;
-    min-height: 70vh;
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 20%, rgba(0, 255, 65, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(0, 212, 255, 0.05) 0%, transparent 40%);
+    animation: pulse-bg 4s ease-in-out infinite alternate;
+    z-index: 1;
+}
+
+@keyframes pulse-bg {
+    0% { opacity: 0.5; }
+    100% { opacity: 1; }
 }
 
 .hero-section .container {
-    max-width: 800px;
+    max-width: 900px;
+    position: relative;
+    z-index: 2;
 }
 
 .hero-section h1 {
     color: var(--matrix-green);
     text-shadow: var(--text-glow);
-    font-size: 3rem;
-    font-weight: bold;
+    font-size: 3.5rem;
+    font-weight: 700;
     margin-bottom: 2rem;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
+    animation: glow-pulse 3s ease-in-out infinite alternate;
+    line-height: 1.2;
+}
+
+@keyframes glow-pulse {
+    0% { text-shadow: 0 0 10px rgba(0, 255, 65, 0.6); }
+    100% { text-shadow: 0 0 25px rgba(0, 255, 65, 0.9), 0 0 35px rgba(0, 255, 65, 0.6); }
 }
 
 .hero-section h1::before {
     content: "> ";
     color: var(--matrix-green);
+    animation: cursor-blink 1s infinite;
 }
 
-/* Initializing text - exactly like image */
+/* Enhanced initializing text with typing effect */
 .initializing-text {
-    color: var(--terminal-blue);
-    font-size: 1rem;
-    margin-bottom: 2rem;
+    color: var(--terminal-cyan);
+    font-size: 1.1rem;
+    margin-bottom: 2.5rem;
     font-style: italic;
+    animation: typing 3s steps(30, end);
 }
 
-/* Status messages - exactly like image */
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+/* Modern status container with glassmorphism */
+.status-container {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--matrix-green);
+    border-radius: 12px;
+    padding: 2.5rem;
+    margin: 3rem 0;
+    text-align: left;
+    box-shadow: 
+        var(--shadow-deep),
+        inset 0 1px 0 rgba(0, 255, 65, 0.1);
+    transition: all 0.3s ease;
+}
+
+.status-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 
+        0 15px 40px rgba(0, 255, 65, 0.2),
+        inset 0 1px 0 rgba(0, 255, 65, 0.2);
+}
+
 .status-line {
     color: var(--matrix-green);
-    font-size: 1rem;
-    margin: 0.5rem 0;
+    font-size: 1.1rem;
+    margin: 0.8rem 0;
     text-align: left;
-    display: inline-block;
+    display: block;
+    position: relative;
+    padding-left: 1.5rem;
 }
 
-.status-container {
-    background: rgba(0, 255, 65, 0.05);
-    border: 1px solid var(--matrix-green);
-    padding: 2rem;
-    margin: 2rem 0;
-    text-align: left;
+.status-line::before {
+    content: '●';
+    position: absolute;
+    left: 0;
+    color: var(--success-green);
+    animation: status-blink 2s infinite;
 }
 
-/* About section in hero - like image */
+@keyframes status-blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0.3; }
+}
+
+/* Enhanced about box with modern design */
 .about-box {
-    background: rgba(0, 0, 0, 0.7);
-    border: 1px solid var(--matrix-green);
-    padding: 1.5rem;
-    margin: 2rem 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--matrix-accent);
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 3rem 0;
     text-align: left;
+    position: relative;
+    overflow: hidden;
+}
+
+.about-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gradient-green);
+    border-radius: 12px 12px 0 0;
+}
+
+.about-box h3 {
+    color: var(--matrix-accent);
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.about-box p {
+    color: var(--matrix-green);
+    line-height: 1.6;
+    font-size: 1rem;
 }
 
 /* Cards - Terminal Windows */
@@ -163,7 +348,7 @@ body {
     color: var(--terminal-green);
 }
 
-/* Project Cards - Exact Style from Image Bottom Section */
+/* Enhanced Projects Section with Modern Layout */
 .projects-section {
     background: var(--matrix-dark);
     padding: 3rem 0;
@@ -268,48 +453,97 @@ body {
     box-shadow: var(--glow-green);
 }
 
-/* Project explore button - exact from image */
-.explore-btn {
+/* Enhanced Action Buttons with Modern UX */
+.hero-section .mt-4 {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 3rem;
+}
+
+.explore-btn, .readme-btn {
     display: inline-flex;
     align-items: center;
-    background: var(--matrix-green);
-    color: #000;
-    padding: 0.8rem 1.2rem;
-    border: none;
-    border-radius: 3px;
-    font-family: 'Courier New', monospace;
-    font-weight: bold;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-family: 'Fira Code', monospace;
+    font-weight: 600;
     text-decoration: none;
-    margin: 0 0.5rem;
-    transition: all 0.3s ease;
+    font-size: 1rem;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    border: none;
+}
+
+.explore-btn {
+    background: var(--gradient-green);
+    color: #000;
+    box-shadow: 
+        0 4px 15px rgba(0, 255, 65, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.explore-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
 }
 
 .explore-btn:hover {
-    background: var(--matrix-bright-green);
-    box-shadow: var(--glow-green);
+    transform: translateY(-3px);
+    box-shadow: 
+        0 8px 25px rgba(0, 255, 65, 0.4),
+        0 0 20px rgba(0, 255, 65, 0.6);
     color: #000;
 }
 
-/* README button - outline style from image */
+.explore-btn:hover::before {
+    left: 100%;
+}
+
+.explore-btn:active {
+    transform: translateY(-1px);
+}
+
 .readme-btn {
-    display: inline-flex;
-    align-items: center;
     background: transparent;
     color: var(--matrix-green);
-    padding: 0.8rem 1.2rem;
-    border: 1px solid var(--matrix-green);
-    border-radius: 3px;
-    font-family: 'Courier New', monospace;
-    font-weight: normal;
-    text-decoration: none;
-    margin: 0 0.5rem;
-    transition: all 0.3s ease;
+    border: 2px solid var(--matrix-green);
+    box-shadow: inset 0 0 0 0 var(--matrix-green);
 }
 
 .readme-btn:hover {
-    background: var(--matrix-green);
     color: #000;
-    box-shadow: var(--glow-green);
+    box-shadow: 
+        inset 300px 0 0 0 var(--matrix-green),
+        0 4px 15px rgba(0, 255, 65, 0.3);
+    transform: translateY(-3px);
+}
+
+.readme-btn:active {
+    transform: translateY(-1px);
+}
+
+/* Responsive button adjustments */
+@media (max-width: 768px) {
+    .hero-section .mt-4 {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .explore-btn, .readme-btn {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+    }
 }
 
 /* Form Elements */
@@ -378,16 +612,54 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: bold;
 }
 
-/* Terminal Cursor Animation */
+/* Enhanced Terminal Animations */
 @keyframes cursor-blink {
     0%, 50% { opacity: 1; }
     51%, 100% { opacity: 0; }
 }
 
+@keyframes matrix-rain {
+    0% { transform: translateY(-100vh); }
+    100% { transform: translateY(100vh); }
+}
+
+@keyframes float-up {
+    0% { 
+        opacity: 0; 
+        transform: translateY(30px); 
+    }
+    100% { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
 .cursor::after {
     content: "_";
     animation: cursor-blink 1s infinite;
-    color: var(--terminal-green);
+    color: var(--matrix-green);
+}
+
+/* Smooth entrance animations */
+.fade-in {
+    animation: float-up 0.8s ease-out forwards;
+}
+
+.fade-in-delay {
+    animation: float-up 0.8s ease-out 0.3s forwards;
+    opacity: 0;
+}
+
+/* Loading states and micro-interactions */
+.loading-dots::after {
+    content: '';
+    animation: loading-dots 1.5s infinite;
+}
+
+@keyframes loading-dots {
+    0%, 20% { content: '.'; }
+    40% { content: '..'; }
+    60%, 100% { content: '...'; }
 }
 
 /* Status Messages */
