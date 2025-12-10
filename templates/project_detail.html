@@ -9,8 +9,8 @@
         <div class="col">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
-                    <li class="breadcrumb-item"><a href="{{ url_for('projects') }}">Projects</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('index') }}">{{ t('home') }}</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('projects') }}">{{ t('nav_projects') }}</a></li>
                     <li class="breadcrumb-item active">{{ project.title }}</li>
                 </ol>
             </nav>
@@ -27,11 +27,11 @@
         {% endif %}
         
         <!-- Project Info -->
-        <div class="col-lg-6">
+        <div class="col-lg-{{ '6' if project.image_url else '12' }}">
             <div class="d-flex align-items-center mb-3">
                 <h1 class="me-3">{{ project.title }}</h1>
                 {% if project.is_featured %}
-                    <span class="badge bg-warning">Featured</span>
+                    <span class="badge bg-warning">{{ t('featured') }}</span>
                 {% endif %}
             </div>
             
@@ -49,7 +49,7 @@
             <!-- Technologies -->
             {% if project.tech_list %}
                 <div class="mb-4">
-                    <h6>Technologies Used:</h6>
+                    <h6>{{ t('technologies_used') }}:</h6>
                     <div>
                         {% for tech in project.tech_list %}
                             <span class="badge bg-secondary me-1 mb-1">{{ tech }}</span>
@@ -59,15 +59,15 @@
             {% endif %}
             
             <!-- Actions -->
-            <div class="d-flex gap-3 mb-4">
+            <div class="d-flex gap-3 mb-4 flex-wrap">
                 {% if project.demo_url %}
                     <a href="{{ project.demo_url }}" target="_blank" class="btn btn-primary">
-                        <i class="fas fa-external-link-alt me-2"></i>View Demo
+                        <i class="fas fa-external-link-alt me-2"></i>{{ t('project_demo') }}
                     </a>
                 {% endif %}
                 {% if project.github_url %}
                     <a href="{{ project.github_url }}" target="_blank" class="btn btn-outline-secondary">
-                        <i class="fab fa-github me-2"></i>Source Code
+                        <i class="fab fa-github me-2"></i>{{ t('project_code') }}
                     </a>
                 {% endif %}
                 
@@ -77,11 +77,11 @@
                             data-project-id="{{ project.id }}">
                         <i class="fas fa-heart me-1"></i>
                         <span class="like-count">{{ project.like_count }}</span>
-                        <span class="like-text">{{ 'Liked' if project.is_liked_by(current_user) else 'Like' }}</span>
+                        <span class="like-text">{{ t('project_liked') if project.is_liked_by(current_user) else t('project_like') }}</span>
                     </button>
                 {% else %}
                     <a href="{{ url_for('login') }}" class="btn btn-outline-danger">
-                        <i class="fas fa-heart me-1"></i>Like ({{ project.like_count }})
+                        <i class="fas fa-heart me-1"></i>{{ t('project_like') }} ({{ project.like_count }})
                     </a>
                 {% endif %}
             </div>
@@ -89,18 +89,18 @@
             <!-- Share -->
             {% if current_user.is_authenticated %}
             <div class="mb-4">
-                <h6>Share this project:</h6>
-                <div class="d-flex gap-2">
+                <h6>{{ t('share_this_project') }}:</h6>
+                <div class="d-flex gap-2 flex-wrap">
                     <a href="{{ url_for('share_project', id=project.id) }}" class="btn btn-outline-primary btn-sm">
-                        <i class="fab fa-linkedin me-1"></i>Share on LinkedIn
+                        <i class="fab fa-linkedin me-1"></i>{{ t('share_linkedin') }}
                     </a>
                     <button class="btn btn-outline-info btn-sm share-twitter" 
                             data-url="{{ request.url }}" 
                             data-text="{{ project.title }}">
-                        <i class="fab fa-twitter me-1"></i>Twitter
+                        <i class="fab fa-twitter me-1"></i>{{ t('share_twitter') }}
                     </button>
                     <button class="btn btn-outline-secondary btn-sm copy-link" data-url="{{ request.url }}">
-                        <i class="fas fa-link me-1"></i>Copy Link
+                        <i class="fas fa-link me-1"></i>{{ t('copy_link') }}
                     </button>
                 </div>
             </div>
@@ -114,7 +114,7 @@
         <div class="col">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="card-title">Project Overview</h3>
+                    <h3 class="card-title">{{ t('project_overview') }}</h3>
                     <div class="content">
                         {{ project.content|replace('\n', '<br>')|safe }}
                     </div>
@@ -130,7 +130,7 @@
             <div class="card">
                 <div class="card-header">
                     <h4 class="mb-0">
-                        <i class="fas fa-comments me-2"></i>Comments ({{ comments|length }})
+                        <i class="fas fa-comments me-2"></i>{{ t('project_comments') }} ({{ comments|length }})
                     </h4>
                 </div>
                 <div class="card-body">
@@ -140,17 +140,17 @@
                             {{ comment_form.hidden_tag() }}
                             <div class="mb-3">
                                 {{ comment_form.content.label(class="form-label") }}
-                                {{ comment_form.content(class="form-control", rows="3", placeholder="Share your thoughts about this project...") }}
+                                {{ comment_form.content(class="form-control", rows="3", placeholder=t('share_thoughts')) }}
                             </div>
                             <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-paper-plane me-2"></i>Post Comment
+                                <i class="fas fa-paper-plane me-2"></i>{{ t('post_comment') }}
                             </button>
                         </form>
                         <hr>
                     {% else %}
                         <div class="alert alert-info">
                             <i class="fas fa-info-circle me-2"></i>
-                            <a href="{{ url_for('login') }}">Login</a> to leave a comment and interact with projects.
+                            <a href="{{ url_for('login') }}">{{ t('nav_login') }}</a> {{ t('login_to_comment') }}
                         </div>
                     {% endif %}
                     
@@ -174,7 +174,7 @@
                                     <div class="flex-grow-1">
                                         <div class="d-flex justify-content-between align-items-start mb-2">
                                             <h6 class="mb-0">{{ comment.author.display_name }}</h6>
-                                            <small class="text-muted">{{ comment.created_at.strftime('%B %d, %Y at %I:%M %p') }}</small>
+                                            <small class="text-muted">{{ comment.created_at.strftime('%d/%m/%Y %H:%M') }}</small>
                                         </div>
                                         <p class="mb-0">{{ comment.content }}</p>
                                     </div>
@@ -184,7 +184,7 @@
                     {% else %}
                         <div class="text-center py-4 text-muted">
                             <i class="fas fa-comment fa-2x mb-3 d-block"></i>
-                            <p>No comments yet. Be the first to share your thoughts!</p>
+                            <p>{{ t('no_comments') }}</p>
                         </div>
                     {% endif %}
                 </div>
@@ -197,66 +197,51 @@
 {% block scripts %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Like functionality
     const likeBtn = document.querySelector('.like-btn');
     if (likeBtn) {
         likeBtn.addEventListener('click', function() {
             const projectId = this.dataset.projectId;
             
-            {% if current_user.is_authenticated %}
-                fetch(`/project/${projectId}/like`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    const likeCount = this.querySelector('.like-count');
-                    const likeText = this.querySelector('.like-text');
-                    
-                    likeCount.textContent = data.like_count;
-                    likeText.textContent = data.liked ? 'Liked' : 'Like';
-                    
-                    if (data.liked) {
-                        this.classList.remove('btn-outline-danger');
-                        this.classList.add('btn-danger');
-                    } else {
-                        this.classList.remove('btn-danger');
-                        this.classList.add('btn-outline-danger');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            {% else %}
-                window.location.href = "{{ url_for('login') }}";
-            {% endif %}
+            fetch('/project/' + projectId + '/like', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const likeCount = this.querySelector('.like-count');
+                const likeText = this.querySelector('.like-text');
+                
+                likeCount.textContent = data.like_count;
+                likeText.textContent = data.liked ? '{{ t("project_liked") }}' : '{{ t("project_like") }}';
+                
+                if (data.liked) {
+                    this.classList.remove('btn-outline-danger');
+                    this.classList.add('btn-danger');
+                } else {
+                    this.classList.remove('btn-danger');
+                    this.classList.add('btn-outline-danger');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         });
     }
-    
-    // Share functionality
-    document.querySelector('.share-linkedin')?.addEventListener('click', function() {
-        const url = encodeURIComponent(this.dataset.url);
-        const title = encodeURIComponent(this.dataset.title);
-        const summary = encodeURIComponent(this.dataset.summary);
-        
-        const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}&title=${title}&summary=${summary}`;
-        window.open(linkedinUrl, '_blank', 'width=600,height=400');
-    });
     
     document.querySelector('.share-twitter')?.addEventListener('click', function() {
         const url = encodeURIComponent(this.dataset.url);
         const text = encodeURIComponent(this.dataset.text);
         
-        const twitterUrl = `https://twitter.com/intent/tweet?url=${url}&text=${text}`;
+        const twitterUrl = 'https://twitter.com/intent/tweet?url=' + url + '&text=' + text;
         window.open(twitterUrl, '_blank', 'width=600,height=400');
     });
     
     document.querySelector('.copy-link')?.addEventListener('click', function() {
         navigator.clipboard.writeText(this.dataset.url).then(() => {
             const originalText = this.innerHTML;
-            this.innerHTML = '<i class="fas fa-check me-1"></i>Copied!';
+            this.innerHTML = '<i class="fas fa-check me-1"></i>{{ t("copied") }}';
             this.classList.add('btn-success');
             this.classList.remove('btn-outline-secondary');
             
@@ -267,12 +252,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 2000);
         });
     });
-    
-    // Convert newlines to line breaks in content
-    const content = document.querySelector('.content');
-    if (content) {
-        content.innerHTML = content.innerHTML.replace(/\n/g, '<br>');
-    }
 });
 </script>
 {% endblock %}

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}📁 Projects - Portfolio{% endblock %}
+{% block title %}📁 {{ t('projects_title') }} - Portfolio{% endblock %}
 
 {% block content %}
 <div class="container py-5">
@@ -9,11 +9,11 @@
         <div class="col">
             <h1 class="display-5 fw-bold mb-3">
                 <i class="fas fa-folder-open me-3"></i>
-                Projects 📁
+                {{ t('projects_title') }} 📁
             </h1>
             <p class="lead text-muted">
                 <i class="fas fa-search me-2"></i>
-                Explore my work and creative solutions 🔍
+                {{ t('projects_subtitle') }} 🔍
             </p>
         </div>
     </div>
@@ -26,17 +26,17 @@
                     <form method="GET" class="row g-3 align-items-center">
                         <div class="col-md-4">
                             <label for="search" class="form-label">
-                                <i class="fas fa-search me-1"></i>Search 🔍
+                                <i class="fas fa-search me-1"></i>{{ t('search') }} 🔍
                             </label>
                             <input type="text" class="form-control" id="search" name="search" 
-                                   value="{{ search_term }}" placeholder="🔍 Search projects...">
+                                   value="{{ search_term }}" placeholder="{{ t('search_placeholder') }}">
                         </div>
                         <div class="col-md-4">
                             <label for="category" class="form-label">
-                                <i class="fas fa-tags me-1"></i>Category 🏷️
+                                <i class="fas fa-tags me-1"></i>{{ t('category') }} 🏷️
                             </label>
                             <select class="form-select" id="category" name="category">
-                                <option value="">All Categories</option>
+                                <option value="">{{ t('all_categories') }}</option>
                                 {% for category in categories %}
                                     <option value="{{ category.id }}" 
                                             {% if selected_category == category.id %}selected{% endif %}>
@@ -49,10 +49,10 @@
                             <label class="form-label">&nbsp;</label>
                             <div class="d-flex gap-2">
                                 <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-filter me-2"></i>Filter 🔽
+                                    <i class="fas fa-filter me-2"></i>{{ t('filter') }} 🔽
                                 </button>
                                 <a href="{{ url_for('projects') }}" class="btn btn-outline-secondary">
-                                    <i class="fas fa-eraser me-2"></i>Clear ✨
+                                    <i class="fas fa-eraser me-2"></i>{{ t('clear') }} ✨
                                 </a>
                             </div>
                         </div>
@@ -82,7 +82,7 @@
                             <div class="d-flex justify-content-between align-items-start mb-2">
                                 <h5 class="card-title">{{ project.title }}</h5>
                                 {% if project.is_featured %}
-                                    <span class="badge bg-warning">Featured</span>
+                                    <span class="badge bg-warning">{{ t('featured') }}</span>
                                 {% endif %}
                             </div>
                             
@@ -94,7 +94,7 @@
                                 </div>
                             {% endif %}
                             
-                            <p class="card-text flex-grow-1">{{ project.description }}</p>
+                            <p class="card-text flex-grow-1">{{ project.description[:150] }}{% if project.description|length > 150 %}...{% endif %}</p>
                             
                             {% if project.tech_list %}
                                 <div class="mb-3">
@@ -115,19 +115,19 @@
                                 <div class="btn-group">
                                     {% if project.demo_url %}
                                         <a href="{{ project.demo_url }}" target="_blank" 
-                                           class="btn btn-outline-primary btn-sm">
+                                           class="btn btn-outline-primary btn-sm" title="{{ t('project_demo') }}">
                                             <i class="fas fa-external-link-alt"></i>
                                         </a>
                                     {% endif %}
                                     {% if project.github_url %}
                                         <a href="{{ project.github_url }}" target="_blank" 
-                                           class="btn btn-outline-secondary btn-sm">
+                                           class="btn btn-outline-secondary btn-sm" title="{{ t('project_code') }}">
                                             <i class="fab fa-github"></i>
                                         </a>
                                     {% endif %}
                                     <a href="{{ url_for('project_detail', id=project.id) }}" 
                                        class="btn btn-primary btn-sm">
-                                        Details
+                                        {{ t('project_details') }}
                                     </a>
                                 </div>
                             </div>
@@ -141,8 +141,8 @@
         <div class="row mt-4">
             <div class="col">
                 <p class="text-muted text-center">
-                    Showing {{ projects|length }} project{{ 's' if projects|length != 1 else '' }}
-                    {% if search_term %}for "{{ search_term }}"{% endif %}
+                    {{ t('showing_projects') }} {{ projects|length }} {{ t('project') if projects|length == 1 else t('projects') }}
+                    {% if search_term %}{{ t('for_search') }} "{{ search_term }}"{% endif %}
                     {% if selected_category %}
                         {% set selected_cat = none %}
                         {% for cat in categories %}
@@ -150,7 +150,7 @@
                                 {% set selected_cat = cat %}
                             {% endif %}
                         {% endfor %}
-                        {% if selected_cat %}in {{ selected_cat.name }}{% endif %}
+                        {% if selected_cat %}{{ t('in_category') }} {{ selected_cat.name }}{% endif %}
                     {% endif %}
                 </p>
             </div>
@@ -159,11 +159,11 @@
         <div class="text-center py-5">
             <div class="text-muted">
                 <i class="fas fa-search fa-3x mb-3 d-block"></i>
-                <h5>No projects found</h5>
+                <h5>{{ t('no_projects_found') }}</h5>
                 {% if search_term or selected_category %}
-                    <p>Try adjusting your search criteria or <a href="{{ url_for('projects') }}">view all projects</a>.</p>
+                    <p>{{ t('try_adjusting') }} <a href="{{ url_for('projects') }}">{{ t('view_all') }}</a>.</p>
                 {% else %}
-                    <p>Projects will appear here once they are published.</p>
+                    <p>{{ t('projects_appear') }}</p>
                 {% endif %}
             </div>
         </div>
@@ -173,7 +173,6 @@
 
 {% block scripts %}
 <script>
-// Add hover effects to project cards
 document.addEventListener('DOMContentLoaded', function() {
     const projectCards = document.querySelectorAll('.project-card');
     

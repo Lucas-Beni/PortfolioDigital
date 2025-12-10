@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Register - Portfolio{% endblock %}
+{% block title %}{{ t('register_title') }} - Portfolio{% endblock %}
 
 {% block content %}
 <div class="container py-5">
@@ -7,14 +7,14 @@
         <div class="col-md-6">
             <div class="card shadow">
                 <div class="card-header">
-                    <h4 class="mb-0">Create Account</h4>
+                    <h4 class="mb-0">{{ t('register_title') }}</h4>
                 </div>
                 <div class="card-body">
                     <form method="POST">
                         {{ form.hidden_tag() }}
                         
                         <div class="mb-3">
-                            {{ form.first_name.label(class="form-label") }}
+                            <label class="form-label">{{ t('first_name') }}</label>
                             {{ form.first_name(class="form-control" + (" is-invalid" if form.first_name.errors else "")) }}
                             {% if form.first_name.errors %}
                                 <div class="invalid-feedback">
@@ -26,7 +26,7 @@
                         </div>
                         
                         <div class="mb-3">
-                            {{ form.last_name.label(class="form-label") }}
+                            <label class="form-label">{{ t('last_name') }}</label>
                             {{ form.last_name(class="form-control" + (" is-invalid" if form.last_name.errors else "")) }}
                             {% if form.last_name.errors %}
                                 <div class="invalid-feedback">
@@ -38,7 +38,7 @@
                         </div>
                         
                         <div class="mb-3">
-                            {{ form.email.label(class="form-label") }}
+                            <label class="form-label">{{ t('email') }}</label>
                             {{ form.email(class="form-control" + (" is-invalid" if form.email.errors else "")) }}
                             {% if form.email.errors %}
                                 <div class="invalid-feedback">
@@ -50,9 +50,9 @@
                         </div>
                         
                         <div class="mb-3">
-                            {{ form.password.label(class="form-label") }}
+                            <label class="form-label">{{ t('password') }}</label>
                             {{ form.password(class="form-control" + (" is-invalid" if form.password.errors else "")) }}
-                            <small class="form-text text-muted">Minimum 6 characters</small>
+                            <small class="form-text text-muted">{{ t('min_characters') }}</small>
                             {% if form.password.errors %}
                                 <div class="invalid-feedback">
                                     {% for error in form.password.errors %}
@@ -63,7 +63,7 @@
                         </div>
                         
                         <div class="mb-3">
-                            {{ form.password2.label(class="form-label") }}
+                            <label class="form-label">{{ t('confirm_password') }}</label>
                             {{ form.password2(class="form-control" + (" is-invalid" if form.password2.errors else "")) }}
                             {% if form.password2.errors %}
                                 <div class="invalid-feedback">
@@ -75,21 +75,21 @@
                         </div>
                         
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">Create Account</button>
+                            <button type="submit" class="btn btn-primary">{{ t('register_button') }}</button>
                         </div>
                     </form>
                     
                     <hr>
                     
                     <div class="text-center">
-                        <p class="mb-2">Already have an account?</p>
-                        <a href="{{ url_for('login') }}" class="btn btn-outline-secondary">Login</a>
+                        <p class="mb-2">{{ t('already_have_account') }}</p>
+                        <a href="{{ url_for('login') }}" class="btn btn-outline-secondary">{{ t('login_button') }}</a>
                     </div>
                     
                     <div class="text-center mt-3">
-                        <p class="text-muted">Or</p>
+                        <p class="text-muted">{{ t('or') }}</p>
                         <a href="{{ url_for('login') }}" class="btn btn-outline-info">
-                            <i class="fas fa-code"></i> Continue with Replit
+                            <i class="fas fa-code"></i> {{ t('continue_replit') }}
                         </a>
                     </div>
                 </div>

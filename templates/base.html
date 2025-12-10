@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="{{ current_language }}" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>{% block title %}Portfolio{% endblock %}</title>
     
     <!-- Bootstrap CSS with Replit theme -->
@@ -64,11 +67,11 @@
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item{% if current_language == 'en' %} active{% endif %}" 
                                    href="{{ url_for('set_language', language='en') }}">
-                                <i class="flag-icon flag-icon-us me-2"></i>{{ t('english') }}
+                                🇺🇸 {{ t('english') }}
                             </a></li>
                             <li><a class="dropdown-item{% if current_language == 'pt' %} active{% endif %}" 
                                    href="{{ url_for('set_language', language='pt') }}">
-                                <i class="flag-icon flag-icon-br me-2"></i>{{ t('portuguese') }}
+                                🇧🇷 {{ t('portuguese') }}
                             </a></li>
                         </ul>
                     </li>
@@ -83,8 +86,12 @@
                                     <li><a class="dropdown-item" href="{{ url_for('admin_dashboard') }}">{{ t('admin_dashboard') }}</a></li>
                                     <li><a class="dropdown-item" href="{{ url_for('admin_projects') }}">{{ t('manage_projects') }}</a></li>
                                     <li><a class="dropdown-item" href="{{ url_for('admin_achievements') }}">{{ t('manage_achievements') }}</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('admin_categories') }}">{{ t('categories') }}</a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('admin_categories') }}">{{ t('manage_categories') }}</a></li>
                                     <li><a class="dropdown-item" href="{{ url_for('admin_about_edit') }}">{{ t('edit_about') }}</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('admin_sync_github') }}">
+                                        <i class="fab fa-github me-1"></i>{{ t('sync_github') }}
+                                    </a></li>
                                 </ul>
                             </li>
                         {% endif %}
@@ -98,11 +105,7 @@
                                 {{ current_user.display_name }}
                             </a>
                             <ul class="dropdown-menu">
-                                {% if current_user.auth_type == 'replit' %}
-                                    <li><a class="dropdown-item" href="{{ url_for('logout') }}">{{ t('nav_logout') }}</a></li>
-                                {% else %}
-                                    <li><a class="dropdown-item" href="{{ url_for('logout') }}">{{ t('nav_logout') }}</a></li>
-                                {% endif %}
+                                <li><a class="dropdown-item" href="{{ url_for('logout') }}">{{ t('nav_logout') }}</a></li>
                             </ul>
                         </li>
                     {% else %}
@@ -116,10 +119,6 @@
                                 </a></li>
                                 <li><a class="dropdown-item" href="{{ url_for('register') }}">
                                     <i class="fas fa-user-plus me-2"></i>{{ t('nav_register') }}
-                                </a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{{ url_for('login') }}">
-                                    <i class="fas fa-code me-2"></i>{{ t('nav_replit_login') }}
                                 </a></li>
                             </ul>
                         </li>
@@ -154,10 +153,10 @@
             <div class="row">
                 <div class="col-md-6">
                     <h5>Portfolio</h5>
-                    <p class="mb-0">Showcasing projects and achievements.</p>
+                    <p class="mb-0">{{ t('portfolio_subtitle') }}</p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <p class="mb-0">&copy; 2025 All rights reserved.</p>
+                    <p class="mb-0">&copy; 2025 {{ t('footer_rights') }}</p>
                 </div>
             </div>
         </div>

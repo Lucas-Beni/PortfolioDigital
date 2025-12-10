@@ -1,63 +1,63 @@
 {% extends "base.html" %}
 
-{% block title %}Portfolio - Home{% endblock %}
+{% block title %}Portfolio - {{ t('nav_home') }}{% endblock %}
 
 {% block content %}
-<!-- Hero Section - Exact Match to Image -->
+<!-- Hero Section -->
 <section class="hero-section">
     <div class="container">
-        <h1 class="fade-in">SYSTEM_PORTFOLIO.EXE</h1>
+        <h1 class="fade-in">{{ t('hero_title') }}</h1>
         
         <div class="initializing-text fade-in-delay">
-            - Initializing digital showcase...
+            {{ t('initializing_text') }}
         </div>
         
         <div class="status-container fade-in-delay">
             <div class="status-line">
                 <i class="fas fa-check-circle status-icon"></i>
-                [STATUS] Projects loaded successfully ✅
+                {{ t('status_projects_loaded') }} ✅
             </div>
             <div class="status-line">
                 <i class="fas fa-power-off status-icon"></i>
-                [MODE] Interactive portfolio system online 🟢
+                {{ t('status_system_online') }} 🟢
             </div>
         </div>
         
         <div class="about-box fade-in-delay">
             <h3>
                 <i class="fas fa-user-cog about-icon"></i>
-                # About Developer 👨‍💻
+                {{ t('about_developer') }} 👨‍💻
             </h3>
             <p>
                 <i class="fas fa-rocket me-2"></i>
-                Passionate developer creating innovative solutions with cutting-edge technology and modern design principles. 🚀✨
+                {{ t('about_developer_text') }} 🚀✨
             </p>
         </div>
         
         <div class="mt-4">
             <a href="{{ url_for('projects') }}" class="explore-btn">
                 <i class="fas fa-terminal me-2"></i>
-                > ./explore_projects.sh 📁
+                {{ t('explore_projects') }} 📁
             </a>
             <a href="{{ url_for('about') }}" class="readme-btn">
                 <i class="fas fa-file-code me-2"></i>
-                cat README.md 📄
+                {{ t('read_readme') }} 📄
             </a>
         </div>
     </div>
 </section>
 
-<!-- Recent Projects Section - Exact Match to Image -->
+<!-- Recent Projects Section -->
 {% if featured_projects %}
 <section class="projects-section">
     <div class="container">
         <h2>
             <i class="fas fa-project-diagram me-3"></i>
-            Recent Projects 🔥
+            {{ t('recent_projects') }} 🔥
         </h2>
         <p class="subtitle">
             <i class="fas fa-star me-2"></i>
-            Showcasing my projects, achievements, and professional journey ⭐
+            {{ t('hero_subtitle') }} ⭐
         </p>
         
         <div class="row g-3">
@@ -74,46 +74,8 @@
                             </div>
                             <a href="{{ url_for('project_detail', id=project.id) }}" class="view-project-btn">
                                 <i class="fas fa-eye me-2"></i>
-                                View Project 👁️
+                                {{ t('view_project') }} 👁️
                             </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-{% endif %}
-
-<!-- Recent Achievements -->
-{% if recent_achievements %}
-<section class="py-5">
-    <div class="container">
-        <div class="row mb-4">
-            <div class="col">
-                <h2 class="h3 fw-bold text-light">{{ t('recent_achievements') }}</h2>
-                <p class="text-muted">{{ t('achievements_subtitle') }}</p>
-            </div>
-        </div>
-        
-        <div class="row g-4">
-            {% for achievement in recent_achievements %}
-            <div class="col-lg-4 col-md-6">
-                <div class="card h-100 bg-secondary achievement-card">
-                    {% if achievement.image_url %}
-                        <img src="{{ url_for('static', filename='uploads/' + achievement.image_url) }}" 
-                             class="card-img-top" style="height: 180px; object-fit: cover;">
-                    {% endif %}
-                    
-                    <div class="card-body d-flex flex-column">
-                        <h6 class="card-title text-warning">{{ achievement.title }}</h6>
-                        <p class="card-text small flex-grow-1 text-light">{{ achievement.description[:100] }}{% if achievement.description|length > 100 %}...{% endif %}</p>
-                        
-                        <div class="mt-auto">
-                            <small class="text-muted">
-                                <i class="fas fa-calendar me-1"></i>{{ achievement.date_earned.strftime('%Y-%m-%d') if achievement.date_earned else 'N/A' }}
-                            </small>
                         </div>
                     </div>
                 </div>

@@ -518,6 +518,22 @@ def admin_about_edit():
     
     return render_template('admin/about_edit.html', form=form, about_me=about_me)
 
+# GitHub Sync Route
+@app.route('/admin/sync-github')
+@admin_required
+def admin_sync_github():
+    """Sync projects from GitHub"""
+    from github_sync import sync_github_projects
+    
+    result = sync_github_projects()
+    
+    if result['success']:
+        flash(f"GitHub sincronizado! {result['synced']} novos projetos, {result.get('updated', 0)} atualizados.", 'success')
+    else:
+        flash(f"Erro ao sincronizar GitHub: {result['message']}", 'error')
+    
+    return redirect(url_for('admin_projects'))
+
 # Error handlers
 @app.errorhandler(404)
 def not_found_error(error):

@@ -1,89 +1,67 @@
-# Portfolio Application
+# Portfolio Digital - Lucas Beni
 
-## Overview
+## Visão Geral
+Site de portfólio pessoal com estilo hacker/terminal, suporte bilíngue (Português/Inglês), e integração com GitHub para sincronização automática de projetos.
 
-This is a Flask-based portfolio web application designed to showcase projects, achievements, and personal information. The application features a clean, modern interface with Bootstrap styling and includes both public-facing pages and an admin panel for content management. It supports user authentication through Replit's OAuth system and provides comprehensive CRUD operations for managing portfolio content.
+## Características Principais
+- **Design Hacker/Terminal**: Interface estilizada com tema verde matrix/terminal
+- **Bilíngue**: Suporte completo para Português e Inglês
+- **Sincronização GitHub**: Importação automática de repositórios do GitHub
+- **Sistema de Projetos**: CRUD completo para projetos com categorias
+- **Sistema de Conquistas**: CRUD completo para conquistas/certificados
+- **Comentários e Likes**: Interação social nos projetos
+- **Compartilhamento**: Integração com LinkedIn e Twitter
 
-## User Preferences
+## Credenciais de Admin
+- **Email**: admin@portfolio.com
+- **Senha**: admin123
 
-Preferred communication style: Simple, everyday language.
-Language Features: Portuguese/English translation system implemented.
-User requested: Translation system for PT/EN and LinkedIn sharing functionality.
-Design preference: Terminal/cyberpunk theme matching provided image - dark background, bright green text, monospace fonts, terminal-style interface elements.
+## Estrutura do Projeto
+```
+├── app.py              # Configuração principal Flask
+├── main.py             # Entry point
+├── routes.py           # Todas as rotas do app
+├── models.py           # Modelos do banco de dados
+├── forms.py            # Formulários WTForms
+├── translations.py     # Sistema de tradução PT/EN
+├── github_sync.py      # Sincronização com GitHub
+├── templates/          # Templates Jinja2
+│   ├── base.html       # Template base
+│   ├── index.html      # Homepage
+│   ├── projects.html   # Lista de projetos
+│   ├── achievements.html # Lista de conquistas
+│   ├── about.html      # Página sobre
+│   ├── auth/           # Login e registro
+│   └── admin/          # Painel administrativo
+└── static/
+    ├── css/custom.css  # Estilos personalizados
+    └── js/main.js      # JavaScript
+```
 
-## System Architecture
+## Tecnologias
+- **Backend**: Flask, SQLAlchemy, Flask-Login
+- **Frontend**: Bootstrap 5, Font Awesome, Fira Code
+- **Banco de Dados**: SQLite (desenvolvimento)
+- **Integração**: GitHub API via Replit Connector
 
-### Frontend Architecture
-- **Template Engine**: Jinja2 templates with Flask
-- **CSS Framework**: Bootstrap with Replit's dark theme
-- **Responsive Design**: Mobile-first approach with Bootstrap grid system
-- **JavaScript**: Vanilla JavaScript for enhanced user interactions
-- **Static Assets**: CSS and JavaScript files served from static directory
-- **Image Handling**: PIL (Pillow) for image processing and optimization
-- **Internationalization**: Translation system supporting Portuguese and English
-- **Social Sharing**: LinkedIn integration with custom messaging
+## Rotas Principais
+- `/` - Homepage
+- `/projects` - Lista de projetos
+- `/achievements` - Lista de conquistas
+- `/about` - Sobre mim
+- `/login` - Login
+- `/register` - Registro
+- `/admin` - Painel administrativo
+- `/admin/sync-github` - Sincronizar projetos do GitHub
 
-### Backend Architecture
-- **Web Framework**: Flask with modular blueprint structure
-- **Database ORM**: SQLAlchemy with declarative base model
-- **Authentication**: Flask-Login with Replit OAuth integration
-- **Form Handling**: WTForms with Flask-WTF for CSRF protection
-- **File Uploads**: Secure file handling with image optimization
-- **Session Management**: Flask sessions with permanent session configuration
+## Preferências do Usuário
+- Idioma preferido: Português
+- Estilo visual: Hacker/Terminal com tema verde matrix
+- GitHub: https://github.com/Lucas-Beni
 
-### Data Models
-- **User Management**: User model with admin privileges and OAuth integration
-- **Content Models**: Project, Achievement, Category, Comment, Like, and AboutMe models
-- **Relationships**: Proper foreign key relationships between entities
-- **Timestamps**: Automatic created_at and updated_at tracking
-
-### Authentication & Authorization
-- **OAuth Provider**: Replit authentication system
-- **Session Storage**: Database-backed OAuth token storage
-- **Access Control**: Decorator-based admin and login requirements
-- **User Roles**: Admin flag for privileged operations
-
-### File Management
-- **Upload Processing**: Secure filename generation with UUID
-- **Image Optimization**: Automatic resizing and compression
-- **Storage Structure**: Organized upload directory with subfolders
-- **File Validation**: Extension and type checking for security
-
-### Admin Panel Features
-- **Dashboard**: Statistics overview and quick access
-- **Content Management**: Full CRUD for projects, achievements, and categories
-- **Profile Management**: About section and personal information editing
-- **Publication Control**: Draft/publish workflow for content
-
-## External Dependencies
-
-### Core Framework Dependencies
-- **Flask**: Web application framework
-- **SQLAlchemy**: Database ORM and connection management
-- **Flask-Login**: User session management
-- **Flask-Dance**: OAuth integration handling
-
-### Form and Validation
-- **WTForms**: Form rendering and validation
-- **Flask-WTF**: CSRF protection and file upload handling
-
-### Image Processing
-- **Pillow (PIL)**: Image manipulation and optimization
-
-### Frontend Libraries
-- **Bootstrap**: CSS framework with Replit dark theme
-- **Font Awesome**: Icon library for UI elements
-
-### Database
-- **SQLite3**: Local database file (portfolio.db) - fully integrated, no environment variables needed
-- **Local Storage**: All data stored locally in SQLite database file
-
-### Authentication Services
-- **Local Authentication**: Username/password authentication system
-- **Replit OAuth**: Third-party authentication provider (maintained for compatibility)
-- **Default Admin**: Built-in admin user (adm@adm.com / adm123) created automatically
-
-### Environment Configuration
-- **Integrated Setup**: No environment variables required - all configuration hardcoded
-- **Session Key**: Hardcoded secure session key for local development
-- **Upload directory**: Static file storage for images
+## Mudanças Recentes (Dezembro 2025)
+- Implementado sistema completo de tradução PT/EN
+- Adicionada sincronização automática com GitHub
+- Melhorado design hacker com efeitos visuais
+- Criado novo usuário admin
+- Atualizado todos os templates para usar traduções

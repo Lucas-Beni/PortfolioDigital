@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}ℹ️ About - Portfolio{% endblock %}
+{% block title %}ℹ️ {{ t('about_title') }} - Portfolio{% endblock %}
 
 {% block content %}
 <div class="container py-5">
@@ -20,25 +20,25 @@
                 {% endif %}
                 
                 <!-- Social Links -->
-                <div class="d-flex justify-content-center gap-3 mb-4">
+                <div class="d-flex justify-content-center gap-3 mb-4 flex-wrap">
                     {% if about_me.linkedin_url %}
-                        <a href="{{ about_me.linkedin_url }}" target="_blank" class="btn btn-outline-primary">
+                        <a href="{{ about_me.linkedin_url }}" target="_blank" class="btn btn-outline-primary" title="{{ t('linkedin_profile') }}">
                             <i class="fab fa-linkedin me-1"></i> 💼
                         </a>
                     {% endif %}
                     {% if about_me.github_url %}
-                        <a href="{{ about_me.github_url }}" target="_blank" class="btn btn-outline-secondary">
+                        <a href="{{ about_me.github_url }}" target="_blank" class="btn btn-outline-secondary" title="{{ t('github_profile') }}">
                             <i class="fab fa-github me-1"></i> 🐙
                         </a>
                     {% endif %}
                     {% if about_me.website_url %}
-                        <a href="{{ about_me.website_url }}" target="_blank" class="btn btn-outline-info">
+                        <a href="{{ about_me.website_url }}" target="_blank" class="btn btn-outline-info" title="{{ t('website_link') }}">
                             <i class="fas fa-globe me-1"></i> 🌍
                         </a>
                     {% endif %}
                     {% if about_me.resume_url %}
-                        <a href="{{ about_me.resume_url }}" target="_blank" class="btn btn-outline-success">
-                            <i class="fas fa-file-pdf me-1"></i> Resume 📄
+                        <a href="{{ about_me.resume_url }}" target="_blank" class="btn btn-outline-success" title="{{ t('download_resume') }}">
+                            <i class="fas fa-file-pdf me-1"></i> 📄
                         </a>
                     {% endif %}
                 </div>
@@ -49,16 +49,14 @@
         <div class="col-lg-8">
             <div class="card">
                 <div class="card-body">
-                    <h1 class="card-title mb-4">About Me</h1>
+                    <h1 class="card-title mb-4">{{ t('about_title') }}</h1>
                     
                     <div class="content">
                         {% if about_me.content %}
-                            {{ about_me.content|nl2br }}
+                            {{ about_me.content|replace('\n', '<br>')|safe }}
                         {% else %}
                             <p class="text-muted">
-                                Welcome to my portfolio! I'm passionate about creating innovative solutions 
-                                and sharing my journey through code. Stay tuned for more updates about my 
-                                background, skills, and experiences.
+                                {{ t('about_default_text') }}
                             </p>
                         {% endif %}
                     </div>
@@ -71,8 +69,8 @@
                     <div class="card text-center h-100">
                         <div class="card-body">
                             <i class="fas fa-project-diagram fa-2x text-primary mb-3"></i>
-                            <h5 class="card-title">Projects</h5>
-                            <p class="card-text">Innovative solutions and creative implementations</p>
+                            <h5 class="card-title">{{ t('quick_stats_projects') }}</h5>
+                            <p class="card-text">{{ t('quick_stats_projects_text') }}</p>
                         </div>
                     </div>
                 </div>
@@ -80,8 +78,8 @@
                     <div class="card text-center h-100">
                         <div class="card-body">
                             <i class="fas fa-trophy fa-2x text-warning mb-3"></i>
-                            <h5 class="card-title">Achievements</h5>
-                            <p class="card-text">Milestones and accomplishments in my journey</p>
+                            <h5 class="card-title">{{ t('quick_stats_achievements') }}</h5>
+                            <p class="card-text">{{ t('quick_stats_achievements_text') }}</p>
                         </div>
                     </div>
                 </div>
@@ -89,8 +87,8 @@
                     <div class="card text-center h-100">
                         <div class="card-body">
                             <i class="fas fa-code fa-2x text-info mb-3"></i>
-                            <h5 class="card-title">Skills</h5>
-                            <p class="card-text">Continuous learning and skill development</p>
+                            <h5 class="card-title">{{ t('quick_stats_skills') }}</h5>
+                            <p class="card-text">{{ t('quick_stats_skills_text') }}</p>
                         </div>
                     </div>
                 </div>
@@ -98,16 +96,4 @@
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block scripts %}
-<script>
-// Convert newlines to line breaks for better display
-document.addEventListener('DOMContentLoaded', function() {
-    const content = document.querySelector('.content');
-    if (content) {
-        content.innerHTML = content.innerHTML.replace(/\n/g, '<br>');
-    }
-});
-</script>
 {% endblock %}
