@@ -49,27 +49,46 @@
     </div>
 </section>
 
-<!-- Recent Projects Section -->
+<!-- Featured Projects Section -->
 {% if featured_projects %}
 <section class="projects-section">
     <div class="container">
         <h2>
-            <i class="fas fa-project-diagram me-3"></i>
-            {{ t('recent_projects') }} 🔥
+            <i class="fas fa-star me-3"></i>
+            {{ t('featured_projects') }} 🔥
         </h2>
         <p class="subtitle">
-            <i class="fas fa-star me-2"></i>
+            <i class="fas fa-code me-2"></i>
             {{ t('hero_subtitle') }} ⭐
         </p>
         
-        <div class="row g-3">
+        <div class="row g-4">
             {% for project in featured_projects %}
-            <div class="col-md-6">
-                <div class="project-card">
+            <div class="col-md-6 col-lg-4">
+                <div class="project-card h-100">
+                    {% if project.image_url %}
+                    <div class="project-card-image">
+                        <img src="{{ url_for('static', filename='uploads/' + project.image_url) }}" alt="{{ project.title }}" class="card-img-top">
+                        {% if project.is_featured %}
+                        <span class="featured-badge">
+                            <i class="fas fa-star"></i>
+                        </span>
+                        {% endif %}
+                    </div>
+                    {% else %}
+                    <div class="project-card-placeholder">
+                        <i class="fas fa-code fa-3x"></i>
+                        {% if project.is_featured %}
+                        <span class="featured-badge">
+                            <i class="fas fa-star"></i>
+                        </span>
+                        {% endif %}
+                    </div>
+                    {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{ project.title }}</h5>
                         <p class="card-text">{{ project.description[:100] }}{% if project.description|length > 100 %}...{% endif %}</p>
-                        <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
                             <div class="project-stats">
                                 <i class="fas fa-heart"></i>
                                 <span>{{ project.like_count or 0 }}</span> ❤️
@@ -83,6 +102,73 @@
                 </div>
             </div>
             {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{{ url_for('projects') }}" class="btn btn-outline-primary">
+                <i class="fas fa-folder-open me-2"></i>
+                {{ t('view_all_projects') }}
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Featured Certifications Section -->
+{% if featured_certifications %}
+<section class="certifications-section">
+    <div class="container">
+        <h2>
+            <i class="fas fa-trophy me-3"></i>
+            {{ t('featured_certifications') }} 🏆
+        </h2>
+        <p class="subtitle">
+            <i class="fas fa-award me-2"></i>
+            {{ t('certifications_subtitle') }} 📜
+        </p>
+        
+        <div class="row g-4">
+            {% for cert in featured_certifications %}
+            <div class="col-md-6 col-lg-3">
+                <div class="certification-card h-100">
+                    {% if cert.image_url %}
+                    <div class="certification-card-image">
+                        <img src="{{ url_for('static', filename='uploads/' + cert.image_url) }}" alt="{{ cert.title }}">
+                    </div>
+                    {% else %}
+                    <div class="certification-card-placeholder">
+                        <i class="fas fa-certificate fa-2x"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h6 class="card-title">{{ cert.title }}</h6>
+                        {% if cert.organization %}
+                        <p class="organization">
+                            <i class="fas fa-building me-1"></i>
+                            {{ cert.organization }}
+                        </p>
+                        {% endif %}
+                        <p class="date-achieved">
+                            <i class="fas fa-calendar me-1"></i>
+                            {{ cert.date_achieved.strftime('%b %Y') }}
+                        </p>
+                        {% if cert.certificate_url %}
+                        <a href="{{ cert.certificate_url }}" target="_blank" class="view-cert-btn">
+                            <i class="fas fa-external-link-alt me-1"></i>
+                            {{ t('view_certificate') }}
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{{ url_for('achievements') }}" class="btn btn-outline-primary">
+                <i class="fas fa-medal me-2"></i>
+                {{ t('nav_achievements') }}
+            </a>
         </div>
     </div>
 </section>

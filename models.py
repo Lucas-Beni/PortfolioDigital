@@ -93,7 +93,7 @@ class Project(db.Model):
     description = db.Column(db.Text, nullable=False)
     content = db.Column(db.Text)  # Detailed content/overview
     image_url = db.Column(db.String(500))
-    demo_url = db.Column(db.String(500))
+    deployed_url = db.Column(db.String(500))
     github_url = db.Column(db.String(500))
     technologies = db.Column(db.String(500))  # Comma-separated list
     is_published = db.Column(db.Boolean, default=False)
@@ -139,6 +139,7 @@ class Achievement(db.Model):
     certificate_url = db.Column(db.String(500))
     organization = db.Column(db.String(200))
     is_published = db.Column(db.Boolean, default=False)
+    is_featured = db.Column(db.Boolean, default=False)
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
     
     created_at = db.Column(db.DateTime, default=datetime.now)

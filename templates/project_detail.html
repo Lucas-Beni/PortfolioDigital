@@ -60,9 +60,9 @@
             
             <!-- Actions -->
             <div class="d-flex gap-3 mb-4 flex-wrap">
-                {% if project.demo_url %}
-                    <a href="{{ project.demo_url }}" target="_blank" class="btn btn-primary">
-                        <i class="fas fa-external-link-alt me-2"></i>{{ t('project_demo') }}
+                {% if project.deployed_url %}
+                    <a href="{{ project.deployed_url }}" target="_blank" class="btn btn-primary">
+                        <i class="fas fa-external-link-alt me-2"></i>{{ t('view_site') }}
                     </a>
                 {% endif %}
                 {% if project.github_url %}

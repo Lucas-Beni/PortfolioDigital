@@ -91,16 +91,16 @@ def logout():
 # Public Routes
 @app.route('/')
 def index():
-    """Homepage showing featured and recent projects"""
-    featured_projects = Project.query.filter_by(is_published=True, is_featured=True).limit(3).all()
-    recent_projects = Project.query.filter_by(is_published=True).order_by(desc(Project.created_at)).limit(6).all()
+    """Homepage showing featured projects and certifications"""
+    featured_projects = Project.query.filter_by(is_published=True, is_featured=True).limit(6).all()
+    featured_certifications = Achievement.query.filter_by(is_published=True, is_featured=True).limit(4).all()
     
     # Get about me info for homepage
     about_me = AboutMe.query.first()
     
     return render_template('index.html', 
                          featured_projects=featured_projects,
-                         recent_projects=recent_projects,
+                         featured_certifications=featured_certifications,
                          about_me=about_me)
 
 @app.route('/projects')
@@ -298,7 +298,7 @@ def admin_project_new():
         project.title = form.title.data
         project.description = form.description.data
         project.content = form.content.data
-        project.demo_url = form.demo_url.data
+        project.deployed_url = form.deployed_url.data
         project.github_url = form.github_url.data
         project.technologies = form.technologies.data
         project.category_id = form.category_id.data if form.category_id.data != 0 else None
@@ -383,6 +383,7 @@ def admin_achievement_new():
         achievement.organization = form.organization.data
         achievement.category_id = form.category_id.data if form.category_id.data != 0 else None
         achievement.is_published = form.is_published.data
+        achievement.is_featured = form.is_featured.data
         
         # Handle file upload
         if form.image.data:

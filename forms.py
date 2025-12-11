@@ -9,7 +9,7 @@ class ProjectForm(FlaskForm):
     description = TextAreaField('Description', validators=[DataRequired()])
     content = TextAreaField('Detailed Content', validators=[Optional()])
     image = FileField('Project Image', validators=[FileAllowed(['jpg', 'png', 'gif', 'jpeg'], 'Images only!')])
-    demo_url = URLField('Demo URL', validators=[Optional(), URL()])
+    deployed_url = URLField('Deployed Site URL (optional)', validators=[Optional(), URL()])
     github_url = URLField('GitHub URL', validators=[Optional(), URL()])
     technologies = StringField('Technologies (comma-separated)', validators=[Optional()])
     category_id = SelectField('Category', coerce=int, validators=[Optional()])
@@ -29,6 +29,7 @@ class AchievementForm(FlaskForm):
     organization = StringField('Organization', validators=[Optional(), Length(max=200)])
     category_id = SelectField('Category', coerce=int, validators=[Optional()])
     is_published = BooleanField('Published')
+    is_featured = BooleanField('Featured')
 
     def __init__(self, *args, **kwargs):
         super(AchievementForm, self).__init__(*args, **kwargs)
@@ -42,7 +43,7 @@ class CommentForm(FlaskForm):
     content = TextAreaField('Comment', validators=[DataRequired(), Length(min=1, max=1000)])
 
 class AboutMeForm(FlaskForm):
-    content = TextAreaField('About Me Content', validators=[DataRequired()])
+    content = TextAreaField('About Me Content', validators=[Optional()])
     profile_image = FileField('Profile Image', validators=[FileAllowed(['jpg', 'png', 'gif', 'jpeg'], 'Images only!')])
     resume_url = URLField('Resume URL', validators=[Optional(), URL()])
     linkedin_url = URLField('LinkedIn URL', validators=[Optional(), URL()])

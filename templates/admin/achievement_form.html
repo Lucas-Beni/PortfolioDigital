@@ -109,7 +109,15 @@
                                 {{ form.is_published(class="form-check-input") }}
                                 {{ form.is_published.label(class="form-check-label") }}
                             </div>
-                            <div class="form-text">Published achievements are visible to visitors</div>
+                            <div class="form-text">Published certifications are visible to visitors</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="form-check">
+                                {{ form.is_featured(class="form-check-input") }}
+                                {{ form.is_featured.label(class="form-check-label") }}
+                            </div>
+                            <div class="form-text">Featured certifications appear on the homepage</div>
                         </div>
                     </div>
                 </div>
