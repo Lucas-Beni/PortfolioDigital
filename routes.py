@@ -174,7 +174,9 @@ def about():
         about_me = AboutMe()
         about_me.content = "Welcome to my portfolio! More information coming soon."
     
-    return render_template('about.html', about_me=about_me)
+    education_list = Education.query.filter_by(is_published=True).order_by(Education.start_date.desc()).all()
+    
+    return render_template('about.html', about_me=about_me, education_list=education_list)
 
 # Interactive Routes (require login)
 @app.route('/project/<int:id>/comment', methods=['POST'])
