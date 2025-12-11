@@ -65,3 +65,7 @@ Site de portfólio pessoal com estilo hacker/terminal, suporte bilíngue (Portug
 - Melhorado design hacker com efeitos visuais
 - Criado novo usuário admin
 - Atualizado todos os templates para usar traduções
+- Removida seção "Ready to Explore?" da página inicial
+- Adicionado módulo de Formação Acadêmica (Education) com CRUD completo
+- Adicionado botão de formação acadêmica no painel admin
+- Adicionada estatística de formações no dashboard admin
