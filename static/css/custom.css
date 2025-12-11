@@ -28,7 +28,7 @@
 
 /* Enhanced Global Styling with Modern UX */
 * {
-    font-family: 'Fira Code', 'JetBrains Mono', 'Courier New', 'Consolas', 'Monaco', monospace !important;
+    font-family: 'Fira Code', 'JetBrains Mono', 'Courier New', 'Consolas', 'Monaco', monospace, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Android Emoji', 'EmojiSymbols';
     font-weight: 400;
     box-sizing: border-box;
 }
@@ -43,9 +43,15 @@ body {
     line-height: 1.6;
     margin: 0;
     padding: 0;
+    padding-top: 80px;
     overflow-x: hidden;
     scroll-behavior: smooth;
     position: relative;
+}
+
+/* Remove padding for hero section pages */
+body.hero-page {
+    padding-top: 0;
 }
 
 /* Scan line effect overlay */
