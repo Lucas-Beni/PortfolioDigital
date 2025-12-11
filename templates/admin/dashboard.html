@@ -67,6 +67,15 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-2 mb-3">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <i class="fas fa-graduation-cap fa-2x text-purple mb-2"></i>
+                    <h4 class="card-title">{{ stats.education }}</h4>
+                    <p class="card-text small">{{ t('education') }}</p>
+                </div>
+            </div>
+        </div>
     </div>
     
     <!-- Quick Actions -->
@@ -74,25 +83,31 @@
         <div class="col">
             <h3>Ações Rápidas</h3>
             <div class="row g-3">
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <a href="{{ url_for('admin_project_new') }}" class="btn btn-primary w-100 py-3">
                         <i class="fas fa-plus fa-2x d-block mb-2"></i>
                         {{ t('new_project') }}
                     </a>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <a href="{{ url_for('admin_achievement_new') }}" class="btn btn-success w-100 py-3">
                         <i class="fas fa-trophy fa-2x d-block mb-2"></i>
                         {{ t('new_achievement') }}
                     </a>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
+                    <a href="{{ url_for('admin_education') }}" class="btn btn-purple w-100 py-3">
+                        <i class="fas fa-graduation-cap fa-2x d-block mb-2"></i>
+                        {{ t('manage_education') }}
+                    </a>
+                </div>
+                <div class="col-md-2">
                     <a href="{{ url_for('admin_categories') }}" class="btn btn-info w-100 py-3">
                         <i class="fas fa-tags fa-2x d-block mb-2"></i>
                         {{ t('manage_categories') }}
                     </a>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <a href="{{ url_for('admin_about_edit') }}" class="btn btn-warning w-100 py-3">
                         <i class="fas fa-user-edit fa-2x d-block mb-2"></i>
                         {{ t('edit_about') }}

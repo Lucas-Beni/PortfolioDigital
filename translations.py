@@ -186,6 +186,16 @@ translations = {
         'error_persist': 'If the problem persists, please',
         'error_think': 'If you think this is an error, please',
         'view_projects_btn': 'View Projects',
+        
+        'total_projects': 'Total Projects',
+        'published_projects': 'Published',
+        'total_achievements': 'Achievements',
+        'categories': 'Categories',
+        'new_project': 'New Project',
+        'new_achievement': 'New Achievement',
+        'recent_comments': 'Recent Comments',
+        'education': 'Education',
+        'manage_education': 'Education',
     },
     'pt': {
         # Navigation
@@ -369,6 +379,16 @@ translations = {
         'error_persist': 'Se o problema persistir, por favor',
         'error_think': 'Se você acha que isso é um erro, por favor',
         'view_projects_btn': 'Ver Projetos',
+        
+        'total_projects': 'Total de Projetos',
+        'published_projects': 'Publicados',
+        'total_achievements': 'Conquistas',
+        'categories': 'Categorias',
+        'new_project': 'Novo Projeto',
+        'new_achievement': 'Nova Conquista',
+        'recent_comments': 'Comentários Recentes',
+        'education': 'Formação',
+        'manage_education': 'Formação',
     }
 }
 

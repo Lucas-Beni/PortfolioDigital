@@ -987,6 +987,28 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--warning-amber);
 }
 
+/* Purple Button and Text */
+.btn-purple {
+    background: linear-gradient(135deg, var(--matrix-purple), #9000cc);
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-purple:hover {
+    background: linear-gradient(135deg, #d000ff, var(--matrix-purple));
+    color: #fff;
+    box-shadow: var(--glow-purple);
+    transform: translateY(-2px);
+}
+
+.text-purple {
+    color: var(--matrix-purple) !important;
+}
+
 /* Footer */
 footer {
     background: rgba(10, 15, 10, 0.95);

@@ -189,3 +189,22 @@ class AboutMe(db.Model):
 
     def __repr__(self):
         return '<AboutMe Section>'
+
+class Education(db.Model):
+    __tablename__ = 'education'
+    id = db.Column(db.Integer, primary_key=True)
+    institution = db.Column(db.String(200), nullable=False)
+    degree = db.Column(db.String(200), nullable=False)
+    field_of_study = db.Column(db.String(200))
+    start_date = db.Column(db.Date, nullable=False)
+    end_date = db.Column(db.Date)
+    is_current = db.Column(db.Boolean, default=False)
+    description = db.Column(db.Text)
+    location = db.Column(db.String(200))
+    is_published = db.Column(db.Boolean, default=True)
+    
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
+
+    def __repr__(self):
+        return f'<Education {self.institution} - {self.degree}>'

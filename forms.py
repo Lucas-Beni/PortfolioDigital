@@ -69,3 +69,14 @@ class RegisterForm(FlaskForm):
 
 class ShareForm(FlaskForm):
     message = TextAreaField('Personal Message', validators=[Optional(), Length(max=500)])
+
+class EducationForm(FlaskForm):
+    institution = StringField('Instituição', validators=[DataRequired(), Length(min=1, max=200)])
+    degree = StringField('Grau/Título', validators=[DataRequired(), Length(min=1, max=200)])
+    field_of_study = StringField('Área de Estudo', validators=[Optional(), Length(max=200)])
+    start_date = DateField('Data de Início', validators=[DataRequired()])
+    end_date = DateField('Data de Conclusão', validators=[Optional()])
+    is_current = BooleanField('Cursando Atualmente')
+    description = TextAreaField('Descrição', validators=[Optional()])
+    location = StringField('Localização', validators=[Optional(), Length(max=200)])
+    is_published = BooleanField('Publicado', default=True)

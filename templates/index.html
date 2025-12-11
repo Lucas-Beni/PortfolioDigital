@@ -174,17 +174,4 @@
 </section>
 {% endif %}
 
-<!-- Call to Action -->
-<section class="py-5 text-center">
-    <div class="container">
-        <h2 class="h3 fw-bold mb-4 text-light">{{ t('cta_title') }}</h2>
-        <p class="lead mb-4 text-muted">{{ t('cta_subtitle') }}</p>
-        <a href="{{ url_for('about') }}" class="btn btn-primary btn-lg me-3">
-            {{ t('learn_more') }}
-        </a>
-        <a href="{{ url_for('projects') }}" class="btn btn-outline-primary btn-lg">
-            {{ t('view_all_projects') }}
-        </a>
-    </div>
-</section>
 {% endblock %}

@@ -6,8 +6,8 @@ import urllib.parse
 
 from app import app, db
 from auth_decorators import login_required, admin_required
-from models import User, Project, Achievement, Category, Comment, Like, AboutMe
-from forms import ProjectForm, AchievementForm, CategoryForm, CommentForm, AboutMeForm, LoginForm, RegisterForm, ShareForm
+from models import User, Project, Achievement, Category, Comment, Like, AboutMe, Education
+from forms import ProjectForm, AchievementForm, CategoryForm, CommentForm, AboutMeForm, LoginForm, RegisterForm, ShareForm, EducationForm
 from utils import save_uploaded_file, delete_file
 from translations import get_translation
 
@@ -273,7 +273,8 @@ def admin_dashboard():
         'achievements': Achievement.query.count(),
         'categories': Category.query.count(),
         'comments': Comment.query.count(),
-        'likes': Like.query.count()
+        'likes': Like.query.count(),
+        'education': Education.query.count()
     }
     
     recent_comments = Comment.query.order_by(desc(Comment.created_at)).limit(5).all()
@@ -534,6 +535,67 @@ def admin_sync_github():
         flash(f"Erro ao sincronizar GitHub: {result['message']}", 'error')
     
     return redirect(url_for('admin_projects'))
+
+# Education Admin Routes
+@app.route('/admin/education')
+@admin_required
+def admin_education():
+    """Admin education list"""
+    education_list = Education.query.order_by(desc(Education.start_date)).all()
+    return render_template('admin/education.html', education_list=education_list)
+
+@app.route('/admin/education/new', methods=['GET', 'POST'])
+@admin_required
+def admin_education_new():
+    """Create new education entry"""
+    form = EducationForm()
+    
+    if form.validate_on_submit():
+        education = Education()
+        education.institution = form.institution.data
+        education.degree = form.degree.data
+        education.field_of_study = form.field_of_study.data
+        education.start_date = form.start_date.data
+        education.end_date = form.end_date.data
+        education.is_current = form.is_current.data
+        education.description = form.description.data
+        education.location = form.location.data
+        education.is_published = form.is_published.data
+        
+        db.session.add(education)
+        db.session.commit()
+        flash('Formação acadêmica adicionada com sucesso!', 'success')
+        return redirect(url_for('admin_education'))
+    
+    return render_template('admin/education_form.html', form=form, title='Nova Formação')
+
+@app.route('/admin/education/<int:id>/edit', methods=['GET', 'POST'])
+@admin_required
+def admin_education_edit(id):
+    """Edit education entry"""
+    education = Education.query.get_or_404(id)
+    form = EducationForm(obj=education)
+    
+    if form.validate_on_submit():
+        form.populate_obj(education)
+        education.updated_at = datetime.now()
+        
+        db.session.commit()
+        flash('Formação acadêmica atualizada com sucesso!', 'success')
+        return redirect(url_for('admin_education'))
+    
+    return render_template('admin/education_form.html', form=form, education=education, title='Editar Formação')
+
+@app.route('/admin/education/<int:id>/delete', methods=['POST'])
+@admin_required
+def admin_education_delete(id):
+    """Delete education entry"""
+    education = Education.query.get_or_404(id)
+    
+    db.session.delete(education)
+    db.session.commit()
+    flash('Formação acadêmica excluída com sucesso!', 'success')
+    return redirect(url_for('admin_education'))
 
 # Error handlers
 @app.errorhandler(404)
