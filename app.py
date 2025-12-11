@@ -15,7 +15,7 @@ db = SQLAlchemy(model_class=Base)
 
 # Create the app
 app = Flask(__name__)
-app.secret_key = "portfolio-secret-key-2024-very-secure-local-development"
+app.secret_key = os.environ.get("SESSION_SECRET", "portfolio-secret-key-2024-very-secure-local-development")
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
 # Configure SQLite database (local file)

@@ -221,7 +221,7 @@ translations = {
         
         # Homepage
         'hero_title': 'SYSTEM_PORTFOLIO.EXE',
-        'hero_subtitle': 'Mostrando meus projetos, conquistas e jornada profissional',
+        'hero_subtitle': 'Mostrando meus projetos, certificações e jornada profissional',
         'initializing_text': '- Inicializando showcase digital...',
         'status_projects_loaded': '[STATUS] Projetos carregados com sucesso',
         'status_system_online': '[MODO] Sistema de portfólio interativo online',
@@ -288,7 +288,7 @@ translations = {
         # Certifications
         'achievements_title': 'Certificações',
         'achievements_page_subtitle': 'Minhas certificações profissionais e credenciais',
-        'achievement_date': 'Data da Conquista',
+        'achievement_date': 'Data de Conclusão',
         'achievement_organization': 'Organização',
         'view_certificate': 'Ver Certificado',
         'no_achievements': 'Nenhuma certificação disponível ainda.',
@@ -296,7 +296,7 @@ translations = {
         'no_achievements_found': 'Nenhuma certificação encontrada',
         'achievements_appear': 'As certificações aparecerão aqui quando forem publicadas.',
         'showing_achievements': 'Mostrando',
-        'achievement': 'conquista',
+        'achievement': 'certificação',
         
         # About
         'about_title': 'Sobre Mim',
@@ -341,11 +341,11 @@ translations = {
         # Admin
         'admin_dashboard': 'Painel de Controle',
         'manage_projects': 'Gerenciar Projetos',
-        'manage_achievements': 'Gerenciar Conquistas',
+        'manage_achievements': 'Gerenciar Certificações',
         'manage_categories': 'Categorias',
         'edit_about': 'Editar Sobre',
         'add_project': 'Adicionar Projeto',
-        'add_achievement': 'Adicionar Conquista',
+        'add_achievement': 'Adicionar Certificação',
         'add_category': 'Adicionar Categoria',
         'sync_github': 'Sincronizar GitHub',
         'syncing': 'Sincronizando...',
@@ -356,7 +356,7 @@ translations = {
         'registration_success': 'Registro realizado com sucesso! Agora você pode fazer login.',
         'invalid_credentials': 'Email ou senha inválidos.',
         'project_saved': 'Projeto salvo com sucesso!',
-        'achievement_saved': 'Conquista salva com sucesso!',
+        'achievement_saved': 'Certificação salva com sucesso!',
         'comment_added': 'Comentário adicionado com sucesso!',
         'like_added': 'Projeto curtido!',
         'like_removed': 'Curtida removida',
@@ -368,7 +368,7 @@ translations = {
         # Footer
         'footer_rights': 'Todos os direitos reservados.',
         'footer_built_with': 'Desenvolvido com',
-        'portfolio_subtitle': 'Mostrando projetos e conquistas.',
+        'portfolio_subtitle': 'Mostrando projetos e certificações.',
         
         # Language
         'language': 'Idioma',
